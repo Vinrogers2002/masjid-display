@@ -8,13 +8,19 @@
     html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
       height: 100%;
       width: 100%;
+      overflow: hidden;         /* Ini kunci: hilangkan scroll */
       font-family: 'Montserrat', sans-serif;
       background: url('https://c0.wallpaperflare.com/path/828/532/1011/masjid-nabawi-i-ve-to-medina-medina-minaret-0e9e43cec7c84c66c2c64bbe00637ed7.jpg') no-repeat center center fixed;
       background-size: cover;
       color: #ffff00;
+      box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
     }
 
     .overlay {
