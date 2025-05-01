@@ -31,7 +31,7 @@
     .left-panel {
       width: 38%;
       padding: 20px;
-      background:  #003366;
+      background: #003366;
       border-radius: 16px;
       backdrop-filter: blur(10px);
       margin-bottom: 20px;
@@ -68,6 +68,7 @@
       text-align: center;
       min-width: 0;
       box-sizing: border-box;
+      transition: transform 0.2s ease, background-color 0.3s ease;
     }
     .prayer-column span {
       display: block;
@@ -118,6 +119,7 @@
       font-size: 32px;
       font-weight: 700;
       margin-bottom: 10px;
+      text-align: center;
     }
     .video-placeholder {
       height: 300px;
@@ -148,6 +150,22 @@
     @keyframes scroll {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
+    }
+    /* Responsivitas */
+    @media (max-width: 768px) {
+      .content {
+        padding: 15px;
+      }
+      .left-panel {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+      .prayer-times {
+        grid-template-columns: 1fr 1fr; /* 2 kolom pada layar kecil */
+      }
+      .masjid-name {
+        font-size: 24px;
+      }
     }
   </style>
 </head>
