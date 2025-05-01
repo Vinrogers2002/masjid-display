@@ -95,6 +95,16 @@
       font-weight: bold;
       border-radius: 12px;
     }
+    /* CSS untuk Kolom Azan */
+    .azan-column {
+      background-color: #FF5733;  /* Merah terang */
+      color: white;
+    }
+
+    .azan-column.highlight {
+      background-color: #C70039;  /* Merah gelap */
+      font-weight: bold;
+    }
     .masjid-name {
       font-size: 32px;
       font-weight: bold;
@@ -215,39 +225,38 @@
       });
 
       // Kolom tambahan untuk countdown adzan
-if (closestCountdown !== null) {
-  const adzanColumn = document.createElement('div');
-  adzanColumn.classList.add('prayer-column');
-  
-  // Menambahkan kelas highlight jika countdown untuk adzan 0 atau kurang
-  const adzanHighlightClass = closestCountdown <= 0 ? 'highlight' : ''; 
-  
-  adzanColumn.innerHTML = `
-    <div class="prayer ${adzanHighlightClass}">
-      <span>Adzan</span>
-      <span id="countdown-timer">${formatCountdown(closestCountdown)}</span>
-    </div>
-  `;
-  prayerDiv.appendChild(adzanColumn);
+      if (closestCountdown !== null) {
+        const adzanColumn = document.createElement('div');
+        adzanColumn.classList.add('azan-column');  // Tambahkan kelas azan-column untuk styling
 
-  countdownInterval = setInterval(function() {
-    closestCountdown--;
-    const countdownEl = document.getElementById('countdown-timer');
-    if (countdownEl) {
-      countdownEl.textContent = formatCountdown(closestCountdown);
-    }
-    if (closestCountdown <= 0) {
-      getPrayerTimes();
-    }
-  }, 1000);
-}
+        // Menambahkan kelas highlight jika countdown untuk adzan 0 atau kurang
+        const adzanHighlightClass = closestCountdown <= 0 ? 'highlight' : ''; 
+        
+        adzanColumn.innerHTML = `
+          <div class="prayer ${adzanHighlightClass}">
+            <span>Adzan</span>
+            <span id="countdown-timer">${formatCountdown(closestCountdown)}</span>
+          </div>
+        `;
+        prayerDiv.appendChild(adzanColumn);
+
+        countdownInterval = setInterval(function() {
+          closestCountdown--;
+          const countdownEl = document.getElementById('countdown-timer');
+          if (countdownEl) {
+            countdownEl.textContent = formatCountdown(closestCountdown);
+          }
+          if (closestCountdown <= 0) {
+            getPrayerTimes();
+          }
+        }, 1000);
+      }
     }
 
-    setInterval(updateClock, 1000);
     updateClock();
-
-    setInterval(getPrayerTimes, 10 * 60 * 1000);
+    setInterval(updateClock, 1000);
     getPrayerTimes();
+    setInterval(getPrayerTimes, 60000);
   </script>
 </body>
 </html>
