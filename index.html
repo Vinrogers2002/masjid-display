@@ -11,33 +11,57 @@
       background: url('https://upload.wikimedia.org/wikipedia/commons/4/4a/Masjid_Istiqlal.jpg') no-repeat center center fixed;
       background-size: cover;
       color: #ffff00;
+      position: relative;
     }
     .overlay {
       background: rgba(0, 0, 0, 0.3);
-      width: 100%;
-      height: 100vh;
       position: absolute;
+      width: 100%;
+      height: 100%;
       top: 0;
       left: 0;
+      z-index: 0;
     }
     .content {
       position: relative;
-      z-index: 10;
+      z-index: 1;
       padding: 30px;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      min-height: 100vh;
       justify-content: space-between;
     }
-    .right-panel {
-      padding: 20px 30px;
+    .top-section {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
     }
     .left-panel {
-      width: 100%;
+      flex: 1;
       padding: 20px;
-      background: #003366;
+      background: rgba(0, 51, 102, 0.8);
       border-radius: 16px;
-      margin-bottom: 70px; /* jarak dari teks berjalan */
+      backdrop-filter: blur(10px);
+    }
+    .right-panel {
+      flex: 1;
+      padding: 20px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 16px;
+    }
+    .masjid-name {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .clock-section {
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(0, 51, 102, 0.8);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .clock {
       font-size: 64px;
@@ -55,8 +79,9 @@
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 10px;
-      margin-top: 30px;
+      margin-top: 20px;
       font-size: 22px;
+      width: 100%;
     }
     .prayer-column {
       background-color: #66cc66;
@@ -64,18 +89,15 @@
       padding: 10px;
       border-radius: 10px;
       text-align: center;
-      box-sizing: border-box;
     }
     .prayer-column span {
       display: block;
-      margin: 4px 0;
       color: white;
     }
     .highlight {
-      background-color: #8B0000;
-      background-image: linear-gradient(to bottom, #8B0000, #7F0000);
+      background-color: #003300;
+      background-image: linear-gradient(to bottom, #003300, #004d00);
       font-weight: bold;
-      border-radius: 12px;
     }
     .azan-column {
       background-color: #8B0000;
@@ -85,21 +107,24 @@
       align-items: center;
       padding: 10px;
       border-radius: 10px;
-      text-align: center;
-      box-sizing: border-box;
     }
     .azan-column.highlight {
       background-color: #C70039;
+      font-weight: bold;
     }
-    .masjid-name {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 10px;
+    #countdown-timer {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffcc00;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
     }
     .running-text {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
+      position: relative;
       background: #000;
       color: #fff;
       padding: 12px;
@@ -116,38 +141,33 @@
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
-    #countdown-timer {
-      font-size: 24px;
-      font-weight: bold;
-      color: #ffcc00;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
   </style>
 </head>
 <body>
   <div class="overlay"></div>
   <div class="content">
-    <div class="right-panel">
-      <div class="masjid-name">Masjid Al Huda</div>
-      <div id="current-date">Kamis, 01 Mei 2025 / 03 Zulkaidah 1446 H</div>
-      <h3>Imam: Ust.Lalu Ami Aziz Saputra S.Ag</h3>
-      <h4>Bilal: Ust. Junaidi</h4>
+    <div class="top-section">
+      <div class="left-panel">
+        <div class="masjid-name">Masjid Al Huda</div>
+        <div id="current-date">Kamis, 01 Mei 2025 / 03 Zulkaidah 1446 H</div>
+        <h3>Imam: Ust.Lalu Ami Aziz Saputra S.Ag</h3>
+        <h4>Bilal: Ust. Junaidi</h4>
+      </div>
+      <div class="right-panel">
+        <!-- panel kosong atau bisa isi dengan info tambahan -->
+      </div>
     </div>
 
-    <!-- Kolom jam dan salat dipindah ke bawah -->
-    <div class="left-panel">
+    <div class="clock-section">
       <div class="clock" id="clock">--:--:--</div>
       <div class="date" id="date">Loading date...</div>
       <div class="prayer-times" id="prayer-times"></div>
     </div>
   </div>
 
-  <div class="running-text"><span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat... (Al Ankabut: 45)</span></div>
+  <div class="running-text">
+    <span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. (Al Ankabut: 45)</span>
+  </div>
 
   <script>
     const prayerTimes = {
@@ -202,10 +222,7 @@
           closestCountdown = Math.floor((prayerDate - now) / 1000);
         }
 
-        const html = `<div class="prayer">
-                        <span>${prayer}</span>
-                        <span>${prayerTimes[prayer]}</span>
-                      </div>`;
+        const html = `<span>${prayer}</span><span>${prayerTimes[prayer]}</span>`;
         const column = document.createElement('div');
         column.classList.add('prayer-column');
         if (prayer === closestPrayer) column.classList.add('highlight');
@@ -216,7 +233,8 @@
       if (closestCountdown !== null) {
         const adzanColumn = document.createElement('div');
         adzanColumn.classList.add('azan-column');
-        const adzanHighlightClass = closestCountdown <= 0 ? 'highlight' : ''; 
+
+        const adzanHighlightClass = closestCountdown <= 0 ? 'highlight' : '';
         
         adzanColumn.innerHTML = `
           <div class="prayer ${adzanHighlightClass}">
@@ -229,12 +247,8 @@
         countdownInterval = setInterval(function() {
           closestCountdown--;
           const countdownEl = document.getElementById('countdown-timer');
-          if (countdownEl) {
-            countdownEl.textContent = formatCountdown(closestCountdown);
-          }
-          if (closestCountdown <= 0) {
-            getPrayerTimes();
-          }
+          if (countdownEl) countdownEl.textContent = formatCountdown(closestCountdown);
+          if (closestCountdown <= 0) getPrayerTimes();
         }, 1000);
       }
     }
