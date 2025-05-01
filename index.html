@@ -40,6 +40,15 @@
       flex: 1;
       padding: 20px 30px;
     }
+    .clock-container {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 10px;
+      color: #ffff00;
+    }
     .clock {
       font-size: 64px;
       font-weight: 700;
@@ -67,7 +76,6 @@
       margin: 20px 0;
       font-size: 24px;
     }
-    /* Kolom Solat dan Adzan */
     .prayer-azan-container {
       display: grid;
       grid-template-columns: repeat(5, 1fr); /* Membuat 5 kolom */
@@ -115,16 +123,6 @@
     @keyframes scroll {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
-    }
-    /* Styling untuk Jam di Kolom Kanan Atas */
-    .clock-container {
-      position: absolute;
-      top: 30px;
-      right: 30px;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 10px;
-      border-radius: 10px;
-      color: #ffff00;
     }
   </style>
 </head>
@@ -189,4 +187,36 @@
       const prayerDiv = document.getElementById('prayer-times');
       prayerDiv.innerHTML = '';
 
-      const timesList = ['Subuh', 'Dhuhr', 'Ashar', 'Mag
+      const timesList = ['Subuh', 'Dhuhr', 'Ashar', 'Maghrib', 'Isya'];
+      let closestPrayer = null;
+      let closestTime = null;
+      let closestCountdown = null;
+
+      timesList.forEach(prayer => {
+        const [hours, minutes] = prayerTimes[prayer].split(':').map(Number);
+        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+
+        if (now < prayerDate && !closestPrayer) {
+          closestPrayer = prayer;
+          closestTime = prayerDate;
+          closestCountdown = Math.floor((prayerDate - now) / 1000);
+        }
+
+        const html = `<div class="prayer">
+                        <span>${prayer}</span>
+                        <span>${prayerTimes[prayer]}</span>
+                      </div>`;
+        prayerDiv.innerHTML += html;
+      });
+
+      if (closestPrayer) {
+        document.getElementById('prayer-times').innerHTML += `<div class="countdown">${closestPrayer} Countdown: ${formatCountdown(closestCountdown)}</div>`;
+      }
+    }
+
+    setInterval(updateClock, 1000);
+    setInterval(getPrayerTimes, 60000); // Update jadwal solat setiap 1 menit
+    getPrayerTimes(); // First load
+  </script>
+</body>
+</html>
