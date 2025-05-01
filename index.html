@@ -92,4 +92,191 @@
       100% { transform: scale(1); }
     }
     .highlight {
-      background-color: #8B0000
+      background-color: #8B0000;
+      background-image: linear-gradient(to bottom, #8B0000, #7F0000);
+      font-weight: bold;
+      border-radius: 12px;
+    }
+    .azan-column {
+      background-color: #8B0000;
+      color: white;
+      display: flex; 
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    .azan-column.highlight {
+      background-color: #C70039;
+      font-weight: bold;
+    }
+    .masjid-name {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .video-placeholder {
+      height: 300px;
+      background-color: rgba(255,255,255,0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+      font-size: 24px;
+    }
+    .running-text {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: #000;
+      color: #fff;
+      padding: 12px;
+      font-size: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .running-text span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll 20s linear infinite;
+    }
+    @keyframes scroll {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+    /* CSS untuk Jam di Kolom Kanan Atas */
+    .clock-container {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 10px;
+      color: #ffff00;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="content">
+    <div class="left-panel">
+      <div class="prayer-times" id="prayer-times"></div>
+    </div>
+    <div class="right-panel">
+      <div class="masjid-name">Masjid Al Huda</div>
+      <div id="current-date">Kamis, 01 Mei 2025 / 03 Zulkaidah 1446 H</div>
+      <div class="video-placeholder">Video Ceramah atau Kajian Live</div>
+      <h3>Imam: Ust.Lalu Ami Aziz Saputra S.Ag</h3>
+      <h4>Bilal: Ust. Junaidi</h4>
+    </div>
+  </div>
+  <div class="running-text"><span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari (perbuatan-perbuatan) keji dan mungkar. Dan sesungguhnya mengingat Allah (shalat) adalah lebih besar (keutamaannya dari ibadat-ibadat yang lain). Dan Allah mengetahui apa yang kamu kerjakan. (Al Ankabut: 45)</span></div>
+  
+  <!-- Jam di Kolom Kanan Atas -->
+  <div class="clock-container">
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="date" id="date">Loading date...</div>
+  </div>
+
+  <script>
+    const prayerTimes = {
+      'Subuh': '04:37',
+      'Dhuhr': '12:07',
+      'Ashar': '15:21',
+      'Maghrib': '18:06',
+      'Isya': '19:17'
+    };
+
+    function updateClock() {
+      const now = new Date();
+      const jam = now.getHours().toString().padStart(2, '0');
+      const menit = now.getMinutes().toString().padStart(2, '0');
+      const detik = now.getSeconds().toString().padStart(2, '0');
+      document.getElementById('clock').textContent = `${jam}:${menit}:${detik}`;
+
+      const hari = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      const tgl = `${hari[now.getDay()]}, ${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
+      document.getElementById('date').textContent = tgl;
+    }
+
+    function formatCountdown(seconds) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const remainingSeconds = seconds % 60;
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
+
+    let countdownInterval;
+
+    function getPrayerTimes() {
+      clearInterval(countdownInterval);
+
+      const now = new Date();
+      const prayerDiv = document.getElementById('prayer-times');
+      prayerDiv.innerHTML = '';
+
+      const timesList = ['Subuh', 'Dhuhr', 'Ashar', 'Maghrib', 'Isya'];
+      let closestPrayer = null;
+      let closestTime = null;
+      let closestCountdown = null;
+
+      timesList.forEach(prayer => {
+        const [hours, minutes] = prayerTimes[prayer].split(':').map(Number);
+        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+
+        if (now < prayerDate && !closestPrayer) {
+          closestPrayer = prayer;
+          closestTime = prayerDate;
+          closestCountdown = Math.floor((prayerDate - now) / 1000);
+        }
+
+        const html = `<div class="prayer">
+                        <span>${prayer}</span>
+                        <span>${prayerTimes[prayer]}</span>
+                      </div>`;
+        const column = document.createElement('div');
+        column.classList.add('prayer-column');
+        if (prayer === closestPrayer) column.classList.add('highlight');
+        column.innerHTML = html;
+        prayerDiv.appendChild(column);
+      });
+
+      if (closestCountdown !== null) {
+        const adzanColumn = document.createElement('div');
+        adzanColumn.classList.add('azan-column');
+
+        const adzanHighlightClass = closestCountdown <= 0 ? 'highlight' : ''; 
+        
+        adzanColumn.innerHTML = `
+          <div class="prayer ${adzanHighlightClass}">
+            <span>Adzan</span>
+            <span id="countdown-timer">${formatCountdown(closestCountdown)}</span>
+          </div>
+        `;
+        prayerDiv.appendChild(adzanColumn);
+
+        countdownInterval = setInterval(function() {
+          closestCountdown--;
+          const countdownEl = document.getElementById('countdown-timer');
+          if (countdownEl) {
+            countdownEl.textContent = formatCountdown(closestCountdown);
+          }
+          if (closestCountdown <= 0) {
+            getPrayerTimes();
+          }
+        }, 1000);
+      }
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+    getPrayerTimes();
+    setInterval(getPrayerTimes, 60000);
+  </script>
+</body>
+</html>
