@@ -215,6 +215,7 @@
       if (closestCountdown !== null) {
         const adzanColumn = document.createElement('div');
         adzanColumn.classList.add('prayer-column');
+        const adzanHighlightClass = closestCountdown <= 0 ? 'highlight' : ''; 
         adzanColumn.innerHTML = `
           <div class="prayer">
             <span>Adzan</span>
