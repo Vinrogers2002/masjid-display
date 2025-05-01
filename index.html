@@ -200,13 +200,13 @@
           closestCountdown = Math.floor((prayerDate - now) / 1000);
         }
 
-        const highlightClass = prayer === closestPrayer ? 'highlight' : '';
-        const html = `<div class="prayer ${highlightClass}">
+        const html = `<div class="prayer">
                         <span>${prayer}</span>
                         <span>${prayerTimes[prayer]}</span>
                       </div>`;
         const column = document.createElement('div');
         column.classList.add('prayer-column');
+        if (prayer === closestPrayer) column.classList.add('highlight');
         column.innerHTML = html;
         prayerDiv.appendChild(column);
       });
