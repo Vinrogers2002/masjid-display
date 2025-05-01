@@ -52,7 +52,7 @@
     }
     .prayer-times {
       display: grid;
-      grid-template-columns: repeat(5, 1fr); /* 5 kolom waktu sholat */
+      grid-template-columns: repeat(6, 1fr); /* 6 kolom termasuk timer mundur */
       gap: 10px;
       margin-top: 40px;
       font-size: 22px;
@@ -197,12 +197,15 @@
       if (closestCountdown !== null) {
         const countdownDiv = document.createElement('div');
         countdownDiv.classList.add('countdown');
-        countdownDiv.innerHTML = `Timer Mundur: ${formatCountdown(closestCountdown)}`;
-        prayerDiv.appendChild(countdownDiv);
+        countdownDiv.innerHTML = `Adzan: ${formatCountdown(closestCountdown)}`;
+        // Menambahkan countdown di sebelah kolom Isya
+        const prayerColumns = document.querySelectorAll('.prayer-column');
+        const isyaColumn = prayerColumns[4];  // Kolom Isya berada pada indeks ke-4
+        isyaColumn.appendChild(countdownDiv);
 
         setInterval(function() {
           closestCountdown--;
-          countdownDiv.innerHTML = `Timer Mundur: ${formatCountdown(closestCountdown)}`;
+          countdownDiv.innerHTML = `Adzan: ${formatCountdown(closestCountdown)}`;
           if (closestCountdown <= 0) {
             getPrayerTimes(); // Memperbarui jadwal setelah waktu salat
           }
