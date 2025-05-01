@@ -25,7 +25,7 @@
       z-index: 10;
       padding: 30px;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       height: 100vh;
     }
     .left-panel {
@@ -34,6 +34,7 @@
       background: rgba(255, 255, 255, 0.1);
       border-radius: 16px;
       backdrop-filter: blur(10px);
+      margin-bottom: 20px;
     }
     .right-panel {
       flex: 1;
@@ -50,26 +51,25 @@
       margin-top: 10px;
     }
     .prayer-times {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr); /* Membuat 7 kolom */
+      gap: 10px;
       margin-top: 40px;
       font-size: 22px;
-      display: flex; /* Menambahkan flexbox untuk kolom */
-      justify-content: space-between; /* Membuat kolom salat terpisah */
     }
     .prayer-column {
-      flex: 1;
-      text-align: center;
+      background-color: rgba(255, 255, 255, 0.4);
       padding: 10px;
+      border-radius: 10px;
+      text-align: center;
     }
-    .prayer {
-      background-color: rgba(255, 255, 255, 0.3);
-      border-radius: 8px;
-      padding: 5px 10px;
-      margin-bottom: 10px;
+    .prayer-column span {
+      display: block;
+      font-size: 18px;
     }
     .highlight {
-      background-color: rgba(255, 255, 255, 0.6);
-      border-radius: 8px;
-      padding: 5px 10px;
+      background-color: rgba(255, 255, 255, 0.7);
+      font-weight: bold;
     }
     .masjid-name {
       font-size: 32px;
