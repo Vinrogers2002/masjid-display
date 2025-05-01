@@ -52,7 +52,7 @@
     }
     .prayer-times {
       display: grid;
-      grid-template-columns: repeat(5, 1fr); /* 5 kolom waktu sholat */
+      grid-template-columns: repeat(6, 1fr); /* 5 waktu salat + 1 adzan */
       gap: 10px;
       margin-top: 40px;
       font-size: 22px;
@@ -63,17 +63,13 @@
       border-radius: 10px;
       text-align: center;
     }
-    .highlight {
-      background-color: #006400; /* Dark Green for highlight */
-      font-weight: bold;
-      color: white; /* Ensure text is visible */
+    .prayer-column span {
+      display: block;
+      margin: 4px 0;
     }
-    .countdown {
-      font-size: 24px;
+    .highlight {
+      background-color: rgba(255, 0, 0, 0.7);
       font-weight: bold;
-      text-align: center;
-      color: #ff6347; /* Warna oranye terang untuk countdown */
-      margin-top: 20px;
     }
     .masjid-name {
       font-size: 32px;
@@ -131,7 +127,6 @@
   <div class="running-text"><span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari (perbuatan-perbuatan) keji dan mungkar. Dan sesungguhnya mengingat Allah (shalat) adalah lebih besar (keutamaannya dari ibadat-ibadat yang lain). Dan Allah mengetahui apa yang kamu kerjakan. (Al Ankabut: 45)</span></div>
 
   <script>
-    // Waktu sholat Batam, Indonesia
     const prayerTimes = {
       'Subuh': '04:37',
       'Dhuhr': '12:07',
@@ -140,7 +135,6 @@
       'Isya': '19:17'
     };
 
-    // Update Jam dan Tanggal
     function updateClock() {
       const now = new Date();
       const jam = now.getHours().toString().padStart(2, '0');
@@ -154,7 +148,6 @@
       document.getElementById('date').textContent = tgl;
     }
 
-    // Menghitung Countdown Menuju Waktu Sholat
     function formatCountdown(seconds) {
       const hours = Math.floor(seconds / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
@@ -162,7 +155,11 @@
       return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     }
 
-    async function getPrayerTimes() {
+    let countdownInterval;
+
+    function getPrayerTimes() {
+      clearInterval(countdownInterval);
+
       const now = new Date();
       const prayerDiv = document.getElementById('prayer-times');
       prayerDiv.innerHTML = '';
@@ -179,13 +176,12 @@
         if (now < prayerDate && !closestPrayer) {
           closestPrayer = prayer;
           closestTime = prayerDate;
-          closestCountdown = Math.floor((prayerDate - now) / 1000); // countdown dalam detik
+          closestCountdown = Math.floor((prayerDate - now) / 1000);
         }
 
         const highlightClass = prayer === closestPrayer ? 'highlight' : '';
-        const displayName = prayer;
         const html = `<div class="prayer ${highlightClass}">
-                        <span>${displayName}</span>
+                        <span>${prayer}</span>
                         <span>${prayerTimes[prayer]}</span>
                       </div>`;
         const column = document.createElement('div');
@@ -194,28 +190,34 @@
         prayerDiv.appendChild(column);
       });
 
-      // Menambahkan countdown timer
+      // Kolom tambahan untuk countdown adzan
       if (closestCountdown !== null) {
-        const countdownDiv = document.createElement('div');
-        countdownDiv.classList.add('countdown');
-        countdownDiv.innerHTML = `Adzan: ${formatCountdown(closestCountdown)}`;
-        prayerDiv.appendChild(countdownDiv);
+        const adzanColumn = document.createElement('div');
+        adzanColumn.classList.add('prayer-column');
+        adzanColumn.innerHTML = `
+          <div class="prayer">
+            <span>Adzan</span>
+            <span id="countdown-timer">${formatCountdown(closestCountdown)}</span>
+          </div>
+        `;
+        prayerDiv.appendChild(adzanColumn);
 
-        setInterval(function() {
+        countdownInterval = setInterval(function() {
           closestCountdown--;
-          countdownDiv.innerHTML = `Adzan: ${formatCountdown(closestCountdown)}`;
+          const countdownEl = document.getElementById('countdown-timer');
+          if (countdownEl) {
+            countdownEl.textContent = formatCountdown(closestCountdown);
+          }
           if (closestCountdown <= 0) {
-            getPrayerTimes(); // Memperbarui jadwal setelah waktu salat
+            getPrayerTimes();
           }
         }, 1000);
       }
     }
 
-    // Update setiap detik untuk Jam dan Tanggal
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Update jadwal sholat setiap 10 menit
     setInterval(getPrayerTimes, 10 * 60 * 1000);
     getPrayerTimes();
   </script>
