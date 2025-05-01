@@ -13,77 +13,56 @@
       color: white;
     }
     .overlay {
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.5);
       width: 100%;
       height: 100vh;
       position: absolute;
       top: 0;
       left: 0;
     }
-    .content {
+    .container {
       position: relative;
       z-index: 10;
       padding: 30px;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      align-items: center;
     }
-    .left-panel {
-      width: 30%;
-      padding: 20px;
-      background: rgba(0, 255, 0, 0.7); /* Ganti background jadi hijau */
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
+    .header {
+      text-align: center;
       margin-bottom: 20px;
     }
-    .right-panel {
-      flex: 1;
-      padding: 20px 40px;
-    }
-    .clock {
-      font-size: 64px;
-      font-weight: bold;
-      text-align: center;
-      color: orange; /* Ubah warna jam menjadi orange */
-    }
-    .date {
-      text-align: center;
-      font-size: 20px;
-      margin-top: 10px;
-      color: orange; /* Ubah warna tanggal menjadi orange */
-    }
-    .prayer-times {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 40px;
-      font-size: 22px;
-      font-weight: bold;
-    }
-    .prayer-column {
-      background-color: rgba(255, 255, 255, 0.7);
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      margin: 0 5px;
-    }
-    .prayer-column span {
-      display: block;
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-    .highlight {
-      background-color: rgba(255, 255, 255, 1);
-      font-weight: bold;
-      color: #f44336;
-      padding: 10px;
-      border-radius: 8px;
-    }
-    .masjid-name {
+    .header h1 {
       font-size: 32px;
       font-weight: bold;
-      margin-bottom: 10px;
+    }
+    .clock, .date {
+      font-size: 24px;
+      color: orange;
+    }
+    .prayer-timetable {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+    .prayer-column {
+      background-color: rgba(0, 255, 0, 0.8);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
+      min-width: 80px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .highlight {
+      background-color: rgba(255, 255, 255, 0.6);
+      color: red;
+      font-weight: bold;
     }
     .video-placeholder {
       height: 300px;
@@ -119,21 +98,18 @@
 </head>
 <body>
   <div class="overlay"></div>
-  <div class="content">
-    <div class="left-panel">
+  <div class="container">
+    <div class="header">
+      <h1>Masjid Al Huda</h1>
       <div class="clock" id="clock">--:--:--</div>
       <div class="date" id="date">Loading date...</div>
-      <div class="prayer-times" id="prayer-times"></div>
     </div>
-    <div class="right-panel">
-      <div class="masjid-name">Masjid Al Huda</div>
-      <div>Kamis, 01 Mei 2025 / 03 Zulkaidah 1446 H</div>
-      <div class="video-placeholder">Video Ceramah atau Kajian Live</div>
-      <h3>Imam : Ust.Lalu Ami Aziz Saputra S.Ag</h3>
-      <h4>Bilal: Ust. Junaidi</h4>
-    </div>
+
+    <div class="prayer-timetable" id="prayer-times"></div>
+
+    <div class="video-placeholder">Video Ceramah atau Kajian Live</div>
+    <div class="running-text"><span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari (perbuatan-perbuatan) keji dan mungkar. Dan sesungguhnya mengingat Allah (shalat) adalah lebih besar (keutamaannya dari ibadat-ibadat yang lain). Dan Allah mengetahui apa yang kamu kerjakan. (Al Ankabut: 45)</span></div>
   </div>
-  <div class="running-text"><span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari (perbuatan-perbuatan) keji dan mungkar. Dan sesungguhnya mengingat Allah (shalat) adalah lebih besar (keutamaannya dari ibadat-ibadat yang lain). Dan Allah mengetahui apa yang kamu kerjakan. (Al Ankabut: 45)</span></div>
 
   <script>
     const latitude = -6.9175;
@@ -186,27 +162,26 @@
           }
         }
 
-        let prayerColumns = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha', 'Imsak'];
-        prayerColumns.forEach((column, index) => {
-          const time = prayerList[column];
+        const prayerColumns = ['Imsak', 'Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+        prayerColumns.forEach((prayer, index) => {
+          const time = prayerList[prayer];
           const displayName = {
+            'Imsak': 'Imsak',
             'Fajr': 'Subuh',
             'Sunrise': 'Syuruq',
             'Dhuhr': 'Dhuhr',
             'Asr': 'Ashar',
             'Maghrib': 'Maghrib',
-            'Isha': 'Isya',
-            'Imsak': 'Imsak'
-          }[column];
+            'Isha': 'Isya'
+          }[prayer];
 
-          const highlightClass = column === currentHighlight ? 'highlight' : '';
-          const html = `<span>${displayName}</span><span>${time}</span>`;
-          const columnElement = document.createElement('div');
-          columnElement.classList.add('prayer-column');
-          columnElement.classList.add(highlightClass);
-          columnElement.innerHTML = html;
-          prayerDiv.appendChild(columnElement);
+          const highlightClass = prayer === currentHighlight ? 'highlight' : '';
+          const column = document.createElement('div');
+          column.classList.add('prayer-column', highlightClass);
+          column.innerHTML = `<span>${displayName}</span><span>${time}</span>`;
+          prayerDiv.appendChild(column);
         });
+
       } catch (error) {
         console.error('Gagal ambil data jadwal:', error);
       }
