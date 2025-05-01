@@ -51,18 +51,18 @@
       margin-top: 10px;
     }
     .prayer-times {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr); /* Membuat 7 kolom */
-      gap: 20px; /* Mengatur jarak antar kolom */
+      display: flex;
+      justify-content: space-evenly;
       margin-top: 40px;
       font-size: 22px;
     }
     .prayer-column {
-      background-color: rgba(255, 255, 255, 0.7); /* Ganti latar belakang kotak */
+      background-color: rgba(255, 255, 255, 0.7);
       padding: 20px;
       border-radius: 12px;
       text-align: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Menambah bayangan kotak */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 100%;
     }
     .prayer-column span {
       display: block;
@@ -70,9 +70,9 @@
       margin-bottom: 10px;
     }
     .highlight {
-      background-color: rgba(255, 255, 255, 1); /* Warna lebih terang untuk waktu sholat saat ini */
+      background-color: rgba(255, 255, 255, 1);
       font-weight: bold;
-      color: #f44336; /* Menggunakan warna merah untuk highlight */
+      color: #f44336;
       padding: 10px;
       border-radius: 8px;
     }
@@ -129,4 +129,87 @@
       <h4>Bilal: Ust. Junaidi</h4>
     </div>
   </div>
-  <div class="running-text"><span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari (perbuatan-perbu
+  <div class="running-text"><span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari (perbuatan-perbuatan) keji dan mungkar. Dan sesungguhnya mengingat Allah (shalat) adalah lebih besar (keutamaannya dari ibadat-ibadat yang lain). Dan Allah mengetahui apa yang kamu kerjakan. (Al Ankabut: 45)</span></div>
+
+  <script>
+    const latitude = -6.9175;
+    const longitude = 107.6191;
+    const method = 5;
+
+    function updateClock() {
+      const now = new Date();
+      const jam = now.getHours().toString().padStart(2, '0');
+      const menit = now.getMinutes().toString().padStart(2, '0');
+      const detik = now.getSeconds().toString().padStart(2, '0');
+      document.getElementById('clock').textContent = `${jam}:${menit}:${detik}`;
+
+      const hari = ['Ahad','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+      const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+      const tgl = `${hari[now.getDay()]}, ${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
+      document.getElementById('date').textContent = tgl;
+    }
+
+    async function getPrayerTimes() {
+      const today = new Date();
+      const dateStr = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`;
+      const url = `https://api.aladhan.com/v1/timings/${dateStr}?latitude=${latitude}&longitude=${longitude}&method=${method}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        const times = data.data.timings;
+
+        const prayerList = {
+          'Imsak': times.Imsak,
+          'Fajr': times.Fajr,
+          'Sunrise': times.Sunrise,
+          'Dhuhr': times.Dhuhr,
+          'Asr': times.Asr,
+          'Maghrib': times.Maghrib,
+          'Isha': times.Isha
+        };
+
+        const prayerDiv = document.getElementById('prayer-times');
+        prayerDiv.innerHTML = '';
+
+        const now = new Date();
+        let currentHighlight = '';
+        for (const [name, time] of Object.entries(prayerList)) {
+          const [h, m] = time.split(':').map(Number);
+          const waktu = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
+          if (now < waktu && !currentHighlight) {
+            currentHighlight = name;
+          }
+        }
+
+        // Menampilkan jadwal sholat per kolom
+        for (const [name, time] of Object.entries(prayerList)) {
+          const displayName = {
+            'Imsak': 'Imsak',
+            'Fajr': 'Subuh',
+            'Sunrise': 'Syuruq',
+            'Dhuhr': 'Dhuhr',
+            'Asr': 'Ashar',
+            'Maghrib': 'Maghrib',
+            'Isha': 'Isya'
+          }[name];
+
+          const highlightClass = name === currentHighlight ? 'highlight' : '';
+          const html = `<span>${displayName}</span><span>${time}</span>`;
+          const column = document.createElement('div');
+          column.classList.add('prayer-column');
+          column.innerHTML = html;
+          prayerDiv.appendChild(column);
+        }
+      } catch (error) {
+        console.error('Gagal ambil data jadwal:', error);
+      }
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+    getPrayerTimes();
+    setInterval(getPrayerTimes, 10 * 60 * 1000);
+  </script>
+</body>
+</html>
