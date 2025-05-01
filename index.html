@@ -225,6 +225,7 @@
         prayerDiv.appendChild(adzanColumn);
 
         countdownInterval = setInterval(function() {
+          console.log("Countdown: ", closestCountdown); 
           closestCountdown--;
           const countdownEl = document.getElementById('countdown-timer');
           if (countdownEl) {
