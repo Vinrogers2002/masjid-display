@@ -67,6 +67,35 @@
       margin: 20px 0;
       font-size: 24px;
     }
+    /* Kolom Solat dan Adzan */
+    .prayer-azan-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr); /* Membuat 5 kolom */
+      gap: 10px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .prayer-azan-column {
+      background-color: #66cc66;
+      background-image: linear-gradient(to bottom, #66cc66, #99e699);
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      box-sizing: border-box;
+      color: white;
+    }
+    .prayer-azan-column span {
+      display: block;
+      margin: 4px 0;
+      color: white;
+    }
+    .prayer-azan-column:hover {
+      background-color: rgba(255, 255, 255, 0.6);
+      transform: scale(1.05);
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+    }
+    /* Running Text */
     .running-text {
       position: absolute;
       bottom: 0;
@@ -87,7 +116,7 @@
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
-    /* CSS untuk Jam di Kolom Kanan Atas */
+    /* Styling untuk Jam di Kolom Kanan Atas */
     .clock-container {
       position: absolute;
       top: 30px;
@@ -96,92 +125,6 @@
       padding: 10px;
       border-radius: 10px;
       color: #ffff00;
-    }
-    .prayer-times {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-      margin-top: 40px;
-      font-size: 22px;
-      overflow-x: hidden;
-    }
-    .prayer-column {
-      background-color: #66cc66;
-      background-image: linear-gradient(to bottom, #66cc66, #99e699);
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-      min-width: 0;
-      box-sizing: border-box;
-    }
-    .prayer-column span {
-      display: block;
-      margin: 4px 0;
-      color: white;
-    }
-    .prayer-column:hover {
-      background-color: rgba(255, 255, 255, 0.6);
-      transform: scale(1.05);
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-    }
-    #countdown-timer {
-      font-size: 24px;
-      font-weight: bold;
-      color: #ffcc00;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
-    .highlight {
-      background-color: #8B0000;
-      background-image: linear-gradient(to bottom, #8B0000, #7F0000);
-      font-weight: bold;
-      border-radius: 12px;
-    }
-    .azan-column {
-      background-color: #8B0000;
-      color: white;
-      display: flex; 
-      justify-content: center;
-      align-items: center;
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-      min-width: 0;
-      box-sizing: border-box;
-    }
-    .azan-column.highlight {
-      background-color: #C70039;
-      font-weight: bold;
-    }
-    /* Styling untuk Kolom Solat dan Adzan */
-    .prayer-azan-container {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
-    .prayer-azan-column {
-      width: 19%;
-      background-color: #66cc66;
-      background-image: linear-gradient(to bottom, #66cc66, #99e699);
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-    }
-    .prayer-azan-column span {
-      display: block;
-      margin: 4px 0;
-      color: white;
-    }
-    .prayer-azan-column:hover {
-      background-color: rgba(255, 255, 255, 0.6);
-      transform: scale(1.05);
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
     }
   </style>
 </head>
@@ -203,34 +146,47 @@
   </div>
 
   <!-- Kolom Solat dan Adzan di atas Running Text -->
-  <div class="prayer-azan-container">
-    <div class="prayer-azan-column">
-      <span>Subuh</span>
-      <span>04:37</span>
-    </div>
-    <div class="prayer-azan-column">
-      <span>Dhuhr</span>
-      <span>12:07</span>
-    </div>
-    <div class="prayer-azan-column">
-      <span>Ashar</span>
-      <span>15:21</span>
-    </div>
-    <div class="prayer-azan-column">
-      <span>Maghrib</span>
-      <span>18:06</span>
-    </div>
-    <div class="prayer-azan-column">
-      <span>Isya</span>
-      <span>19:17</span>
-    </div>
+  <div class="prayer-azan-container" id="prayer-times">
+    <!-- Kolom Solat & Adzan akan otomatis terisi oleh Javascript -->
   </div>
 
   <!-- Running Text -->
   <div class="running-text"><span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari (perbuatan-perbuatan) keji dan mungkar. Dan sesungguhnya mengingat Allah (shalat) adalah lebih besar (keutamaannya dari ibadat-ibadat yang lain). Dan Allah mengetahui apa yang kamu kerjakan. (Al Ankabut: 45)</span></div>
 
   <script>
-    // Script untuk clock dan countdown tetap seperti sebelumnya...
-  </script>
-</body>
-</html>
+    const prayerTimes = {
+      'Subuh': '04:37',
+      'Dhuhr': '12:07',
+      'Ashar': '15:21',
+      'Maghrib': '18:06',
+      'Isya': '19:17'
+    };
+
+    function updateClock() {
+      const now = new Date();
+      const jam = now.getHours().toString().padStart(2, '0');
+      const menit = now.getMinutes().toString().padStart(2, '0');
+      const detik = now.getSeconds().toString().padStart(2, '0');
+      document.getElementById('clock').textContent = `${jam}:${menit}:${detik}`;
+
+      const hari = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      const tgl = `${hari[now.getDay()]}, ${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
+      document.getElementById('date').textContent = tgl;
+    }
+
+    function formatCountdown(seconds) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const remainingSeconds = seconds % 60;
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
+
+    let countdownInterval;
+
+    function getPrayerTimes() {
+      const now = new Date();
+      const prayerDiv = document.getElementById('prayer-times');
+      prayerDiv.innerHTML = '';
+
+      const timesList = ['Subuh', 'Dhuhr', 'Ashar', 'Mag
