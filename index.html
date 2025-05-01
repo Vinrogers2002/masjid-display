@@ -61,6 +61,7 @@
     }
     .prayer-column {
       background-color: #66cc66;
+      background-image: linear-gradient(to bottom, #66cc66, #99e699);
       padding: 10px;
       border-radius: 10px;
       text-align: center;
@@ -90,6 +91,7 @@
     }
     .highlight {
       background-color: #006400;
+      background-image: linear-gradient(to bottom, #006400, #004d00);
       font-weight: bold;
     }
     .masjid-name {
@@ -212,30 +214,32 @@
       });
 
       // Kolom tambahan untuk countdown adzan
-      if (closestCountdown !== null) {
-        const adzanColumn = document.createElement('div');
-        adzanColumn.classList.add('prayer-column');
-        const adzanHighlightClass = closestCountdown <= 0 ? 'highlight' : ''; 
-        adzanColumn.innerHTML = `
-         <div class="prayer ${adzanHighlightClass}">
-            <span>Adzan</span>
-            <span id="countdown-timer">${formatCountdown(closestCountdown)}</span>
-          </div>
-        `;
-        prayerDiv.appendChild(adzanColumn);
+if (closestCountdown !== null) {
+  const adzanColumn = document.createElement('div');
+  adzanColumn.classList.add('prayer-column');
+  
+  // Menambahkan kelas highlight jika countdown untuk adzan 0 atau kurang
+  const adzanHighlightClass = closestCountdown <= 0 ? 'highlight' : ''; 
+  
+  adzanColumn.innerHTML = `
+    <div class="prayer ${adzanHighlightClass}">
+      <span>Adzan</span>
+      <span id="countdown-timer">${formatCountdown(closestCountdown)}</span>
+    </div>
+  `;
+  prayerDiv.appendChild(adzanColumn);
 
-        countdownInterval = setInterval(function() {
-          console.log("Countdown: ", closestCountdown); 
-          closestCountdown--;
-          const countdownEl = document.getElementById('countdown-timer');
-          if (countdownEl) {
-            countdownEl.textContent = formatCountdown(closestCountdown);
-          }
-          if (closestCountdown <= 0) {
-            getPrayerTimes();
-          }
-        }, 1000);
-      }
+  countdownInterval = setInterval(function() {
+    closestCountdown--;
+    const countdownEl = document.getElementById('countdown-timer');
+    if (countdownEl) {
+      countdownEl.textContent = formatCountdown(closestCountdown);
+    }
+    if (closestCountdown <= 0) {
+      getPrayerTimes();
+    }
+  }, 1000);
+}
     }
 
     setInterval(updateClock, 1000);
