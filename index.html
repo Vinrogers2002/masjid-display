@@ -54,9 +54,10 @@
     }
     .prayer-times {
       display: flex;
-      justify-content: space-evenly;
+      justify-content: space-between;
       margin-top: 40px;
       font-size: 22px;
+      font-weight: bold;
     }
     .prayer-column {
       background-color: rgba(255, 255, 255, 0.7);
@@ -185,7 +186,6 @@
           }
         }
 
-        // Menampilkan jadwal sholat per kolom
         let prayerColumns = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha', 'Imsak'];
         prayerColumns.forEach((column, index) => {
           const time = prayerList[column];
