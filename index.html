@@ -27,7 +27,6 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
-      overflow: hidden;
     }
     .left-panel {
       width: 30%;
@@ -36,12 +35,10 @@
       border-radius: 16px;
       backdrop-filter: blur(10px);
       margin-bottom: 20px;
-      overflow-y: auto;
     }
     .right-panel {
       flex: 1;
       padding: 20px 40px;
-      overflow-y: auto;
     }
     .clock {
       font-size: 64px;
@@ -156,4 +153,70 @@
       document.getElementById('date').textContent = tgl;
     }
 
-    // Menghitung Countdown
+    // Menghitung Countdown Menuju Waktu Sholat
+    function formatCountdown(seconds) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const remainingSeconds = seconds % 60;
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
+
+    async function getPrayerTimes() {
+      const now = new Date();
+      const prayerDiv = document.getElementById('prayer-times');
+      prayerDiv.innerHTML = '';
+
+      const timesList = ['Subuh', 'Dhuhr', 'Ashar', 'Maghrib', 'Isya'];
+      let closestPrayer = null;
+      let closestTime = null;
+      let closestCountdown = null;
+
+      timesList.forEach(prayer => {
+        const [hours, minutes] = prayerTimes[prayer].split(':').map(Number);
+        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+
+        if (now < prayerDate && !closestPrayer) {
+          closestPrayer = prayer;
+          closestTime = prayerDate;
+          closestCountdown = Math.floor((prayerDate - now) / 1000); // countdown dalam detik
+        }
+
+        const highlightClass = prayer === closestPrayer ? 'highlight' : '';
+        const displayName = prayer;
+        const html = `<div class="prayer ${highlightClass}">
+                        <span>${displayName}</span>
+                        <span>${prayerTimes[prayer]}</span>
+                      </div>`;
+        const column = document.createElement('div');
+        column.classList.add('prayer-column');
+        column.innerHTML = html;
+        prayerDiv.appendChild(column);
+      });
+
+      // Menambahkan countdown timer
+      if (closestCountdown !== null) {
+        const countdownDiv = document.createElement('div');
+        countdownDiv.classList.add('countdown');
+        countdownDiv.innerHTML = `Timer Mundur: ${formatCountdown(closestCountdown)}`;
+        prayerDiv.appendChild(countdownDiv);
+
+        setInterval(function() {
+          closestCountdown--;
+          countdownDiv.innerHTML = `Timer Mundur: ${formatCountdown(closestCountdown)}`;
+          if (closestCountdown <= 0) {
+            getPrayerTimes(); // Memperbarui jadwal setelah waktu salat
+          }
+        }, 1000);
+      }
+    }
+
+    // Update setiap detik untuk Jam dan Tanggal
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Update jadwal sholat setiap 10 menit
+    setInterval(getPrayerTimes, 10 * 60 * 1000);
+    getPrayerTimes();
+  </script>
+</body>
+</html>
