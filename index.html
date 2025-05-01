@@ -2,137 +2,134 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Jadwal Sholat Masjid</title>
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
       font-family: 'Montserrat', sans-serif;
       background: url('https://c0.wallpaperflare.com/path/828/532/1011/masjid-nabawi-i-ve-to-medina-medina-minaret-0e9e43cec7c84c66c2c64bbe00637ed7.jpg') no-repeat center center fixed;
       background-size: cover;
       color: #ffff00;
     }
+
     .overlay {
       background: rgba(0, 0, 0, 0.3);
-      width: 100%;
-      height: 100vh;
       position: absolute;
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
     }
+
     .content {
       position: relative;
       z-index: 10;
-      padding: 30px;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      justify-content: space-between;
+      height: 100%;
+      padding: 30px;
+      box-sizing: border-box;
     }
-    .left-panel {
-      width: 38%;
-      padding: 20px;
-      background: #2f2f2f;
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      margin-bottom: 20px;
+
+    .top-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
     }
-    .right-panel {
-      flex: 1;
-      padding: 20px 30px;
+
+    .clock-box {
+      text-align: center;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      padding: 10px 20px;
     }
+
     .clock {
       font-size: 64px;
       font-weight: 700;
-      text-align: center;
       color: #ffff00;
     }
+
     .date {
-      text-align: center;
       font-size: 20px;
-      margin-top: 10px;
       color: #ffff00;
     }
+
+    .right-info {
+      text-align: right;
+    }
+
+    .masjid-name {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
     .prayer-times {
       display: grid;
-      grid-template-columns: repeat(6, 1fr); /* 5 waktu salat + 1 adzan */
+      grid-template-columns: repeat(6, 1fr);
       gap: 10px;
-      margin-top: 40px;
       font-size: 22px;
-      overflow-x: hidden;
+      margin-top: 30px;
     }
+
     .prayer-column {
       background-color: #66cc66;
       background-image: linear-gradient(to bottom, #66cc66, #99e699);
       padding: 10px;
       border-radius: 10px;
       text-align: center;
-      min-width: 0;
-      box-sizing: border-box;
     }
+
     .prayer-column span {
       display: block;
       margin: 4px 0;
       color: white;
     }
-    .prayer-column:hover {
-      background-color: rgba(255, 255, 255, 0.6);
-      transform: scale(1.05);
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-    }
-    #countdown-timer {
-      font-size: 24px;
-      font-weight: bold;
-      color: #ffcc00;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
+
     .highlight {
       background-color: #8B0000;
       background-image: linear-gradient(to bottom, #8B0000, #7F0000);
       font-weight: bold;
       border-radius: 12px;
     }
-    /* CSS untuk Kolom Azan */
+
     .azan-column {
       background-color: #8B0000;
       color: white;
-      display: flex; 
+      display: flex;
       justify-content: center;
       align-items: center;
       padding: 10px;
       border-radius: 10px;
       text-align: center;
-      min-width: 0;
-      box-sizing: border-box;
     }
+
     .azan-column.highlight {
-      background-color: #C70039;  /* Merah gelap */
+      background-color: #C70039;
       font-weight: bold;
     }
-    .masjid-name {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    .video-placeholder {
-      height: 300px;
-      background-color: rgba(255,255,255,0.2);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 20px 0;
+
+    #countdown-timer {
       font-size: 24px;
+      font-weight: bold;
+      color: #ffcc00;
+      animation: pulse 1.5s infinite;
     }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
     .running-text {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
       background: #000;
       color: #fff;
       padding: 12px;
@@ -140,11 +137,13 @@
       white-space: nowrap;
       overflow: hidden;
     }
+
     .running-text span {
       display: inline-block;
       padding-left: 100%;
       animation: scroll 20s linear infinite;
     }
+
     @keyframes scroll {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
@@ -154,19 +153,25 @@
 <body>
   <div class="overlay"></div>
   <div class="content">
-    <div class="left-panel">
-      <div class="clock" id="clock">--:--:--</div>
-      <div class="date" id="date">Loading date...</div>
-      <div class="prayer-times" id="prayer-times"></div>
+    <div class="top-section">
+      <div class="clock-box">
+        <div class="clock" id="clock">--:--:--</div>
+        <div class="date" id="date">Loading date...</div>
+      </div>
+      <div class="right-info">
+        <div class="masjid-name">Masjid Al Huda Komplek Rajawali Bandara</div>
+        <div id="current-date">Kamis, 01 Mei 2025 / 03 Zulkaidah 1446 H</div>
+        <div>Imam: Ust. Lalu Ami Aziz Saputra S.Ag</div>
+        <div>Bilal: Ust. Junaidi</div>
+      </div>
     </div>
-    <div class="right-panel">
-      <div class="masjid-name">Masjid Al Huda Komplek Rajawali Bandara</div>
-      <div id="current-date">Kamis, 01 Mei 2025 / 03 Zulkaidah 1446 H</div>
-      <h3>Imam: Ust.Lalu Ami Aziz Saputra S.Ag</h3>
-      <h4>Bilal: Ust. Junaidi</h4>
+
+    <div class="prayer-times" id="prayer-times"></div>
+
+    <div class="running-text">
+      <span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari (perbuatan-perbuatan) keji dan mungkar. Dan sesungguhnya mengingat Allah (shalat) adalah lebih besar (keutamaannya dari ibadat-ibadat yang lain). Dan Allah mengetahui apa yang kamu kerjakan. (Al Ankabut: 45)</span>
     </div>
   </div>
-  <div class="running-text"><span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari (perbuatan-perbuatan) keji dan mungkar. Dan sesungguhnya mengingat Allah (shalat) adalah lebih besar (keutamaannya dari ibadat-ibadat yang lain). Dan Allah mengetahui apa yang kamu kerjakan. (Al Ankabut: 45)</span></div>
 
   <script>
     const prayerTimes = {
@@ -208,7 +213,6 @@
 
       const timesList = ['Subuh', 'Dhuhr', 'Ashar', 'Maghrib', 'Isya'];
       let closestPrayer = null;
-      let closestTime = null;
       let closestCountdown = null;
 
       timesList.forEach(prayer => {
@@ -217,29 +221,26 @@
 
         if (now < prayerDate && !closestPrayer) {
           closestPrayer = prayer;
-          closestTime = prayerDate;
           closestCountdown = Math.floor((prayerDate - now) / 1000);
         }
 
-        const html = `<div class="prayer">
-                        <span>${prayer}</span>
-                        <span>${prayerTimes[prayer]}</span>
-                      </div>`;
         const column = document.createElement('div');
         column.classList.add('prayer-column');
         if (prayer === closestPrayer) column.classList.add('highlight');
-        column.innerHTML = html;
+
+        column.innerHTML = `
+          <div class="prayer">
+            <span>${prayer}</span>
+            <span>${prayerTimes[prayer]}</span>
+          </div>`;
         prayerDiv.appendChild(column);
       });
 
-      // Kolom tambahan untuk countdown adzan
       if (closestCountdown !== null) {
         const adzanColumn = document.createElement('div');
-        adzanColumn.classList.add('azan-column');  // Tambahkan kelas azan-column untuk styling
+        adzanColumn.classList.add('azan-column');
 
-        // Menambahkan kelas highlight jika countdown untuk adzan 0 atau kurang
-        const adzanHighlightClass = closestCountdown <= 0 ? 'highlight' : ''; 
-        
+        const adzanHighlightClass = closestCountdown <= 0 ? 'highlight' : '';
         adzanColumn.innerHTML = `
           <div class="prayer ${adzanHighlightClass}">
             <span>Adzan</span>
@@ -248,15 +249,11 @@
         `;
         prayerDiv.appendChild(adzanColumn);
 
-        countdownInterval = setInterval(function() {
+        countdownInterval = setInterval(() => {
           closestCountdown--;
-          const countdownEl = document.getElementById('countdown-timer');
-          if (countdownEl) {
-            countdownEl.textContent = formatCountdown(closestCountdown);
-          }
-          if (closestCountdown <= 0) {
-            getPrayerTimes();
-          }
+          const el = document.getElementById('countdown-timer');
+          if (el) el.textContent = formatCountdown(closestCountdown);
+          if (closestCountdown <= 0) getPrayerTimes();
         }, 1000);
       }
     }
