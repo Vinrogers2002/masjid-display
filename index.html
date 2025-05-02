@@ -48,15 +48,34 @@
     }
     .prayer-times {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-      font-size: 20px;
-      margin-bottom: 10px;
-      width: 90%;
+      grid-template-columns: repeat(5, 1fr); /* Menyesuaikan dengan 5 kolom */
+      gap: 20px;
+      font-size: 22px;
+      margin-bottom: 20px;
+      width: 95%;
     }
-    .prayer-column {
+    /* Kolom Jadwal Salat */
+    .prayer-column.subuh {
       background-color: #66cc66;
       background-image: linear-gradient(to bottom, #66cc66, #99e699);
+    }
+    .prayer-column.dhuhr {
+      background-color: #ffcc00;
+      background-image: linear-gradient(to bottom, #ffcc00, #ffdd66);
+    }
+    .prayer-column.ashar {
+      background-color: #ff6600;
+      background-image: linear-gradient(to bottom, #ff6600, #ff9966);
+    }
+    .prayer-column.maghrib {
+      background-color: #ff3333;
+      background-image: linear-gradient(to bottom, #ff3333, #ff6666);
+    }
+    .prayer-column.isya {
+      background-color: #9933cc;
+      background-image: linear-gradient(to bottom, #9933cc, #cc66ff);
+    }
+    .prayer-column {
       padding: 10px;
       border-radius: 10px;
       text-align: center;
@@ -73,7 +92,7 @@
       border-radius: 10px;
     }
     #countdown-timer {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: bold;
       color: #ffcc00;
       animation: pulse 1.5s infinite;
@@ -98,15 +117,16 @@
       font-size: 18px;
     }
     .running-text {
-      position: absolute;
+      position: fixed;
       bottom: 0;
       width: 100%;
       background: #000;
       color: #fff;
       padding: 12px;
-      font-size: 20px;
+      font-size: 22px;
       white-space: nowrap;
       overflow: hidden;
+      text-align: center;
     }
     .running-text span {
       display: inline-block;
@@ -193,6 +213,14 @@
 
         const column = document.createElement('div');
         column.classList.add('prayer-column');
+
+        // Menambahkan kelas warna sesuai dengan salat
+        if (prayer === 'Subuh') column.classList.add('subuh');
+        else if (prayer === 'Dhuhr') column.classList.add('dhuhr');
+        else if (prayer === 'Ashar') column.classList.add('ashar');
+        else if (prayer === 'Maghrib') column.classList.add('maghrib');
+        else if (prayer === 'Isya') column.classList.add('isya');
+
         if (prayer === closestPrayer) column.classList.add('highlight');
         column.innerHTML = `<span>${prayer}</span><span>${prayerTimes[prayer]}</span>`;
         prayerDiv.appendChild(column);
