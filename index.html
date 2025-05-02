@@ -40,7 +40,7 @@
       top: 100px;
       left: 0;
       right: 0;
-      bottom: 50px; /* Sisakan ruang untuk running text */
+      bottom: 60px; /* Sesuaikan ruang untuk running text */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -48,51 +48,30 @@
     }
     .prayer-times {
       display: grid;
-      grid-template-columns: repeat(5, 1fr); /* Menyesuaikan dengan 5 kolom */
-      gap: 20px;
-      font-size: 22px;
-      margin-bottom: 20px;
-      width: 95%;
-    }
-    /* Kolom Jadwal Salat */
-    .prayer-column.subuh {
-      background-color: #66cc66;
-      background-image: linear-gradient(to bottom, #66cc66, #99e699);
-    }
-    .prayer-column.dhuhr {
-      background-color: #ffcc00;
-      background-image: linear-gradient(to bottom, #ffcc00, #ffdd66);
-    }
-    .prayer-column.ashar {
-      background-color: #ff6600;
-      background-image: linear-gradient(to bottom, #ff6600, #ff9966);
-    }
-    .prayer-column.maghrib {
-      background-color: #ff3333;
-      background-image: linear-gradient(to bottom, #ff3333, #ff6666);
-    }
-    .prayer-column.isya {
-      background-color: #9933cc;
-      background-image: linear-gradient(to bottom, #9933cc, #cc66ff);
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      font-size: 20px;
+      margin-bottom: 10px;
+      width: 90%;
     }
     .prayer-column {
       padding: 10px;
       border-radius: 10px;
       text-align: center;
     }
-    .prayer-column span {
-      display: block;
-      margin: 4px 0;
-      color: white;
-    }
+    .subuh { background-color: #66cc66; background-image: linear-gradient(to bottom, #66cc66, #99e699); }
+    .dhuhr { background-color: #ffcc00; background-image: linear-gradient(to bottom, #ffcc00, #ffeb66); }
+    .ashar { background-color: #ff6666; background-image: linear-gradient(to bottom, #ff6666, #ff9999); }
+    .maghrib { background-color: #ff9900; background-image: linear-gradient(to bottom, #ff9900, #ffcc66); }
+    .isya { background-color: #9900cc; background-image: linear-gradient(to bottom, #9900cc, #cc66ff); }
     .highlight {
       background-color: #8B0000;
       background-image: linear-gradient(to bottom, #8B0000, #7F0000);
       font-weight: bold;
       border-radius: 10px;
     }
-    #countdown-timer {
-      font-size: 24px;
+    #countdown-timer, #iqamah-timer {
+      font-size: 20px;
       font-weight: bold;
       color: #ffcc00;
       animation: pulse 1.5s infinite;
@@ -117,16 +96,15 @@
       font-size: 18px;
     }
     .running-text {
-      position: fixed;
+      position: absolute;
       bottom: 0;
       width: 100%;
       background: #000;
       color: #fff;
       padding: 12px;
-      font-size: 22px;
+      font-size: 20px;
       white-space: nowrap;
       overflow: hidden;
-      text-align: center;
     }
     .running-text span {
       display: inline-block;
@@ -212,34 +190,30 @@
         }
 
         const column = document.createElement('div');
-        column.classList.add('prayer-column');
-
-        // Menambahkan kelas warna sesuai dengan salat
-        if (prayer === 'Subuh') column.classList.add('subuh');
-        else if (prayer === 'Dhuhr') column.classList.add('dhuhr');
-        else if (prayer === 'Ashar') column.classList.add('ashar');
-        else if (prayer === 'Maghrib') column.classList.add('maghrib');
-        else if (prayer === 'Isya') column.classList.add('isya');
-
+        column.classList.add('prayer-column', prayer.toLowerCase());
         if (prayer === closestPrayer) column.classList.add('highlight');
         column.innerHTML = `<span>${prayer}</span><span>${prayerTimes[prayer]}</span>`;
         prayerDiv.appendChild(column);
       });
 
-      // Tambahkan kolom azan countdown
+      // Tambahkan kolom adzan dan iqamah countdown
       if (closestCountdown !== null) {
-        const adzanColumn = document.createElement('div');
-        adzanColumn.classList.add('prayer-column');
-        adzanColumn.innerHTML = `
+        const countdownColumn = document.createElement('div');
+        countdownColumn.classList.add('prayer-column');
+        countdownColumn.innerHTML = `
           <span>Adzan</span>
           <span id="countdown-timer">${formatCountdown(closestCountdown)}</span>
+          <span>Iqamah</span>
+          <span id="iqamah-timer">${formatCountdown(closestCountdown + 300)}</span> <!-- Countdown iqamah 5 menit -->
         `;
-        prayerDiv.appendChild(adzanColumn);
+        prayerDiv.appendChild(countdownColumn);
 
         countdownInterval = setInterval(function() {
           closestCountdown--;
           const countdownEl = document.getElementById('countdown-timer');
           if (countdownEl) countdownEl.textContent = formatCountdown(closestCountdown);
+          const iqamahEl = document.getElementById('iqamah-timer');
+          if (iqamahEl) iqamahEl.textContent = formatCountdown(closestCountdown + 300); // Iqamah countdown
           if (closestCountdown <= 0) getPrayerTimes();
         }, 1000);
       }
