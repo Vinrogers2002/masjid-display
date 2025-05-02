@@ -77,16 +77,35 @@
       margin-top: 20px;
     }
     .prayer-column {
-      background-color: #66cc66;
-      background-image: linear-gradient(to bottom, #66cc66, #99e699);
-      padding: 20px; /* Meningkatkan padding agar kolom lebih lebar */
-      border-radius: 12px; /* Sedikit melengkungkan sudut */
+      padding: 20px;
+      border-radius: 12px;
       text-align: center;
-      min-width: 120px; /* Menambah lebar minimum kolom */
+      min-width: 120px;
       flex: 1;
-      font-size: 24px; /* Menambah ukuran font */
+      font-size: 24px;
       font-weight: bold;
       color: white;
+    }
+    /* Menambahkan warna berbeda pada setiap kolom solat */
+    .subuh {
+      background-color: #66cc66;
+      background-image: linear-gradient(to bottom, #66cc66, #99e699);
+    }
+    .dhuhr {
+      background-color: #ff9900;
+      background-image: linear-gradient(to bottom, #ff9900, #ffcc66);
+    }
+    .ashar {
+      background-color: #00b3b3;
+      background-image: linear-gradient(to bottom, #00b3b3, #66cccc);
+    }
+    .maghrib {
+      background-color: #ff3399;
+      background-image: linear-gradient(to bottom, #ff3399, #ff66cc);
+    }
+    .isya {
+      background-color: #9900cc;
+      background-image: linear-gradient(to bottom, #9900cc, #cc66ff);
     }
     .highlight {
       background-color: #8B0000;
@@ -95,13 +114,13 @@
     .azan-column {
       background-color: #8B0000;
       color: white;
-      padding: 20px; /* Meningkatkan padding agar kolom azan lebih besar */
+      padding: 20px;
       border-radius: 12px;
       text-align: center;
       min-width: 120px;
       flex: 1;
-      font-size: 24px; /* Menambah ukuran font agar sesuai dengan kolom solat */
-      font-weight: bold; /* Menyesuaikan font agar sama dengan kolom solat */
+      font-size: 24px;
+      font-weight: bold;
     }
     #countdown-timer {
       color: #ffcc00;
@@ -208,43 +227,21 @@
           closestCountdown = Math.floor((prayerDate - now) / 1000);
         }
 
-        const html = `<div class="prayer">
-                        <span>${prayer}</span>
-                        <span>${prayerTimes[prayer]}</span>
+        const html = `<div class="prayer-column ${prayer.toLowerCase()}">
+                        <div>${prayer}</div>
+                        <div>${prayerTimes[prayer]}</div>
                       </div>`;
-        const column = document.createElement('div');
-        column.classList.add('prayer-column');
-        if (prayer === closestPrayer) column.classList.add('highlight');
-        column.innerHTML = html;
-        prayerDiv.appendChild(column);
+        prayerDiv.innerHTML += html;
       });
 
-      // Kolom tambahan untuk countdown adzan
-      if (closestCountdown !== null) {
-        const adzanColumn = document.createElement('div');
-        adzanColumn.classList.add('azan-column');
-        const adzanHighlightClass = closestCountdown <= 0 ? 'highlight' : ''; 
-        adzanColumn.innerHTML = `
-          <div class="prayer ${adzanHighlightClass}">
-            <span>Adzan</span>
-            <span id="countdown-timer">${formatCountdown(closestCountdown)}</span>
-          </div>
-        `;
-        prayerDiv.appendChild(adzanColumn);
-
-        countdownInterval = setInterval(() => {
-          closestCountdown--;
-          const countdownEl = document.getElementById('countdown-timer');
-          if (countdownEl) countdownEl.textContent = formatCountdown(closestCountdown);
-          if (closestCountdown <= 0) getPrayerTimes();
-        }, 1000);
-      }
+      document.getElementById('countdown-timer').textContent = `Sisa Waktu: ${formatCountdown(closestCountdown)}`;
     }
 
-    updateClock();
     setInterval(updateClock, 1000);
-    getPrayerTimes();
     setInterval(getPrayerTimes, 60000);
+
+    updateClock();
+    getPrayerTimes();
   </script>
 </body>
 </html>
