@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
   <title>Jadwal Sholat Masjid</title>
   <style>
+    /* CSS yang telah diperbaiki */
     * {
       margin: 0;
       padding: 0;
@@ -43,23 +43,24 @@
       justify-content: space-between;
       align-items: flex-start;
     }
+    .clock-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
     .clock-box {
       background: rgba(0,0,0,0.6);
       padding: 10px 20px;
       border-radius: 12px;
       text-align: center;
+      margin-bottom: 10px;
     }
     .countdown-row {
       display: flex;
       justify-content: space-between;
       gap: 20px;
       margin-top: 10px;
-    }
-    .clock-wrapper {
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     gap: 10px;
     }
     .countdown-column {
       background-color: #333;
@@ -106,94 +107,6 @@
       color: #ffff00;
       text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
     }
-    .prayer-times {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-    .prayer-column {
-      padding: 30px;
-      border-radius: 12px;
-      text-align: center;
-      min-width: 120px;
-      flex: 1;
-      font-size: 34px;
-      font-weight: bold;
-      color: white;
-    }
-    /* Mengubah warna kolom solat menjadi lebih solid dan tegas */
-    .subuh {
-      background-color: #008000; /* Hijau solid */
-    }
-    .dhuhr {
-      background-color: #ff6600; /* Oranye solid */
-    }
-    .ashar {
-      background-color: #0066cc; /* Biru solid */
-    }
-    .maghrib {
-      background-color: #cc0000; /* Merah solid */
-    }
-    .isya {
-      background-color: #660066; /* Ungu gelap solid */
-    }
-    .highlight {
-      background-color: #8B0000;
-      background-image: linear-gradient(to bottom, #8B0000, #7F0000);
-    }
-    .azan-column {
-      background-color: #8B0000;
-      color: white;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      min-width: 120px;
-      flex: 1;
-      font-size: 24px;
-      font-weight: bold;
-    }
-    #countdown-timer {
-      color: #ffcc00;
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .running-text {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #000;
-      color: #fff;
-      padding: 12px 0;
-      font-size: 45px;
-      white-space: nowrap;
-      overflow: hidden;
-      z-index: 2;
-    }
-    .running-text span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: scroll 60s linear infinite;
-    }
-    @keyframes scroll {
-      0% { transform: translateX(0%); }
-      100% { transform: translateX(-100%); }
-    }
-
-    /* Tanda untuk solat yang akan datang */
-    .next-prayer {
-      border: 3px solid #ffcc00;
-      background-color: rgba(255, 204, 0, 0.6);
-      animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
-      50% { box-shadow: 0 0 25px rgba(255, 204, 0, 1); }
-      100% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
-    }
   </style>
 </head>
 <body>
@@ -201,58 +114,25 @@
   <div class="container">
     <div class="header">
       <div class="clock-wrapper">
-      <div class="clock-box">
-        <div class="clock" id="clock">--:--:--</div>
-        <div class="date" id="date">Loading date...</div>
-      </div>
-
-      <!-- Countdown DIPISAH dari clock-box -->
-     <div class="countdown-row">
-       <div class="countdown-column adzan">
-         <div>Adzan</div>
-         <div id="countdown-adzan">00:00:00</div> 
-       </div>
-       <div class="countdown-column iqamah">
-         <div>Iqamah</div>
-         <div id="countdown-iqamah">00:00:00</div>
-       </div>
-      </div>
-      <div class="info-masjid">
-        <div class="masjid-name">Masjid Al Huda Komplek Rajawali Bandara</div>
-        <h3>Imam: Ust.Lalu Ami Aziz Saputra S.Ag</h3>
-        <h4>Bilal: Ust. Junaidi</h4>
+        <div class="clock-box">
+          <div class="clock" id="clock">--:--:--</div>
+          <div class="date" id="date">Loading date...</div>
+        </div>
+        <!-- Countdown DIPISAH dari clock-box -->
+        <div class="countdown-row">
+          <div class="countdown-column adzan">
+            <div>Adzan</div>
+            <div id="countdown-adzan">00:00:00</div> 
+          </div>
+          <div class="countdown-column iqamah">
+            <div>Iqamah</div>
+            <div id="countdown-iqamah">00:00:00</div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="prayer-times" id="prayer-times"></div>
   </div>
-
-  <div class="running-text">
-    <span>Pengumuman : Pelatihan Tilawatil quran setiap hari sabtu ba'da isya, bersama Ust. Muhammad Yunus (Qori' Senior Kota Batam) | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari (perbuatan-perbuatan) keji dan mungkar. Dan sesungguhnya mengingat Allah (shalat) adalah lebih besar (keutamaannya dari ibadat-ibadat yang lain). Dan Allah mengetahui apa yang kamu kerjakan. (Al Ankabut: 45)</span>
-  </div>
-
   <script>
-    const prayerTimes = {
-      'Subuh': '04:37',
-      'Dhuhr': '12:07',
-      'Ashar': '15:21',
-      'Maghrib': '18:06',
-      'Isya': '19:17'
-    };
-
-    function startCountdown(id, seconds) {
-      function update() {
-      const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
-      const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-      const secs = String(seconds % 60).padStart(2, '0');
-      document.getElementById(id).textContent = `${hrs}:${mins}:${secs}`;
-      if (seconds > 0) {
-        seconds--;
-        setTimeout(update, 1000);
-      }
-    }
-    update();   
-  }
     function updateClock() {
       const now = new Date();
       const jam = now.getHours().toString().padStart(2, '0');
@@ -265,58 +145,8 @@
       const tgl = `${hari[now.getDay()]}, ${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
       document.getElementById('date').textContent = tgl;
     }
-
-    function formatCountdown(seconds) {
-      const hours = Math.floor(seconds / 3600);
-      const minutes = Math.floor((seconds % 3600) / 60);
-      const remainingSeconds = seconds % 60;
-      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-    }
-
-    let countdownInterval;
-
-    function getPrayerTimes() {
-      clearInterval(countdownInterval);
-      startCountdown("countdown-adzan", 300);   // contoh: 5 menit
-      startCountdown("countdown-iqamah", 600);  // contoh: 10 menit
-
-      const now = new Date();
-      const prayerDiv = document.getElementById('prayer-times');
-      prayerDiv.innerHTML = '';
-
-      const timesList = ['Subuh', 'Dhuhr', 'Ashar', 'Maghrib', 'Isya'];
-      let closestPrayer = null;
-      let closestTime = null;
-      let closestCountdown = null;
-
-      timesList.forEach(prayer => {
-        const [hours, minutes] = prayerTimes[prayer].split(':').map(Number);
-        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
-
-        if (now < prayerDate && !closestPrayer) {
-          closestPrayer = prayer;
-          closestTime = prayerDate;
-          closestCountdown = Math.floor((prayerDate - now) / 1000);
-        }
-
-        const prayerClass = prayer.toLowerCase();
-        const isNextPrayer = prayer === closestPrayer ? 'next-prayer' : '';
-
-        const html = `<div class="prayer-column ${prayerClass} ${isNextPrayer}">
-                        <div>${prayer}</div>
-                        <div>${prayerTimes[prayer]}</div>
-                      </div>`;
-        prayerDiv.innerHTML += html;
-      });
-
-      document.getElementById('countdown-timer').textContent = `Sisa Waktu: ${formatCountdown(closestCountdown)}`;
-    }
-
     setInterval(updateClock, 1000);
-    setInterval(getPrayerTimes, 60000);
-
     updateClock();
-    getPrayerTimes();
   </script>
 </body>
 </html>
