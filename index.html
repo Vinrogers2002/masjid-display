@@ -100,8 +100,8 @@
       background-image: linear-gradient(to bottom, #00b3b3, #66cccc);
     }
     .maghrib {
-      background-color: #ff3399;
-      background-image: linear-gradient(to bottom, #ff3399, #ff66cc);
+      background-color: #3399ff;
+      background-image: linear-gradient(to bottom, #3399ff, #66ccff); /* Ganti warna Maghrib */
     }
     .isya {
       background-color: #9900cc;
@@ -148,6 +148,19 @@
     @keyframes scroll {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
+    }
+
+    /* Tanda untuk solat yang akan datang */
+    .next-prayer {
+      border: 3px solid #ffcc00;
+      background-color: rgba(255, 204, 0, 0.6);
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
+      50% { box-shadow: 0 0 25px rgba(255, 204, 0, 1); }
+      100% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
     }
   </style>
 </head>
@@ -227,7 +240,10 @@
           closestCountdown = Math.floor((prayerDate - now) / 1000);
         }
 
-        const html = `<div class="prayer-column ${prayer.toLowerCase()}">
+        const prayerClass = prayer.toLowerCase();
+        const isNextPrayer = prayer === closestPrayer ? 'next-prayer' : '';
+
+        const html = `<div class="prayer-column ${prayerClass} ${isNextPrayer}">
                         <div>${prayer}</div>
                         <div>${prayerTimes[prayer]}</div>
                       </div>`;
