@@ -35,45 +35,6 @@
     .date {
       font-size: 18px;
     }
-    .main-content {
-      position: absolute;
-      top: 100px;
-      left: 0;
-      right: 0;
-      bottom: 50px; /* Sisakan ruang untuk running text */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-    }
-    .prayer-times {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-      font-size: 20px;
-      margin-bottom: 10px;
-      width: 90%;
-    }
-    .prayer-column {
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-    }
-    .highlight {
-      background-color: #8B0000;
-      font-weight: bold;
-    }
-    #countdown-timer, #iqamah-timer {
-      font-size: 20px;
-      font-weight: bold;
-      color: #ffcc00;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
     .info-panel {
       position: absolute;
       top: 20px;
@@ -83,10 +44,6 @@
     .masjid-name {
       font-size: 28px;
       font-weight: bold;
-    }
-    .video-placeholder {
-      margin-top: 10px;
-      font-size: 18px;
     }
     .running-text {
       position: absolute;
@@ -108,20 +65,60 @@
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
-    .prayer-column-subuh {
-      background-color: #4caf50;
+    .main-content {
+      position: absolute;
+      top: 80px;
+      left: 0;
+      right: 0;
+      bottom: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
     }
-    .prayer-column-dhuhr {
-      background-color: #2196f3;
+    .prayer-times {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      font-size: 20px;
+      width: 90%;
     }
-    .prayer-column-ashar {
-      background-color: #ff9800;
+    .prayer-column {
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #ffff00;
     }
-    .prayer-column-maghrib {
-      background-color: #ff5722;
+    .highlight {
+      background-color: #8B0000;
+      font-weight: bold;
     }
-    .prayer-column-isya {
-      background-color: #9c27b0;
+    #countdown-timer, #iqamah-timer {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffcc00;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .countdown-container {
+      position: absolute;
+      top: 120px;
+      right: 30px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 10px;
+      color: #ffff00;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .countdown-label {
+      font-size: 16px;
     }
   </style>
 </head>
@@ -143,6 +140,13 @@
 
   <div class="running-text">
     <span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Quran dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari keji dan mungkar. (Al Ankabut: 45)</span>
+  </div>
+
+  <div class="countdown-container" id="countdown-container">
+    <div id="adzan-label" class="countdown-label">Adzan</div>
+    <div id="countdown-timer">--:--:--</div>
+    <div id="iqamah-label" class="countdown-label">Iqamah</div>
+    <div id="iqamah-timer">--:--:--</div>
   </div>
 
   <script>
@@ -205,16 +209,9 @@
         prayerDiv.appendChild(column);
       });
 
-      // Tambahkan kolom adzan countdown
+      // Update countdowns
       if (closestCountdown !== null) {
-        const adzanColumn = document.createElement('div');
-        adzanColumn.classList.add('prayer-column');
-        adzanColumn.innerHTML = `
-          <span>Adzan</span>
-          <span id="countdown-timer">${formatCountdown(closestCountdown)}</span>
-        `;
-        document.body.appendChild(adzanColumn);
-
+        document.getElementById('countdown-timer').textContent = formatCountdown(closestCountdown);
         countdownInterval = setInterval(function() {
           closestCountdown--;
           const countdownEl = document.getElementById('countdown-timer');
