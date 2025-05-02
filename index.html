@@ -61,6 +61,15 @@
       margin-top: 8px;
       color: #ffff00;
     }
+    .azan-iqamah {
+      background-color: #8B0000;
+      color: #ffff00;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-size: 18px;
+      min-width: 180px;
+    }
     .info-masjid {
       text-align: right;
     }
@@ -83,14 +92,14 @@
     .prayer-column {
       background-color: #66cc66;
       background-image: linear-gradient(to bottom, #66cc66, #99e699);
-      padding: 16px;
+      padding: 24px 16px; /* Larger padding for better size */
       border-radius: 12px;
       text-align: center;
-      flex: 2;
-      min-width: 150px;
+      flex: 3; /* Larger size */
+      min-width: 180px;
       color: white;
       font-weight: bold;
-      font-size: 24px;
+      font-size: 28px; /* Font size increased */
     }
     .highlight {
       border: 4px solid yellow;
@@ -108,7 +117,7 @@
       background: #000;
       color: #fff;
       padding: 16px 0;
-      font-size: 30px;
+      font-size: 28px;
       white-space: nowrap;
       overflow: hidden;
       z-index: 2;
@@ -122,25 +131,6 @@
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
-    .azan-iqamah-row {
-      display: flex;
-      gap: 12px;
-      margin-top: 10px;
-      width: 100%;
-    }
-    .azan-box, .iqamah-box {
-      background-color: rgba(0, 0, 0, 0.6);  /* Hitam transparan seperti kolom jam */
-      color: #ffff00;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 18px;
-      flex: 1;  /* Agar lebar kolom azan dan iqamah sama dengan lebar kolom jam */
-      text-align: center;
-    }
-    .azan-box .time, .iqamah-box .time {
-      margin-top: 10px;
-      font-size: 16px;
-    }
   </style>
 </head>
 <body>
@@ -152,15 +142,9 @@
           <div class="clock" id="clock">--:--:--</div>
           <div class="date" id="date">Loading date...</div>
         </div>
-        <div class="azan-iqamah-row">
-          <div class="azan-box">
-            <div><strong>Adzan:</strong></div>
-            <div class="time" id="countdown-timer">--:--:--</div>
-          </div>
-          <div class="iqamah-box">
-            <div><strong>Iqamah:</strong></div>
-            <div class="time">+10 menit</div>
-          </div>
+        <div class="azan-iqamah">
+          <div><strong>Adzan:</strong> <span id="countdown-timer">--:--:--</span></div>
+          <div style="margin-top: 6px;"><strong>Iqamah:</strong> +10 menit</div>
         </div>
       </div>
       <div class="info-masjid">
@@ -215,7 +199,7 @@
       const prayerDiv = document.getElementById('prayer-times');
       prayerDiv.innerHTML = '';
 
-      const colors = ['#4CAF50', '#2196F3', '#FF9800', '#FF5722', '#9C27B0'];
+      const colors = ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#03A9F4'];
       const timesList = Object.keys(prayerTimes);
       let closestPrayer = null;
       let closestTime = null;
@@ -238,25 +222,22 @@
         if (prayer === closestPrayer) column.classList.add('highlight');
 
         column.innerHTML = `
-          <span>${prayer}</span>
-          <span>${prayerTimes[prayer]}</span>
+          <div>${prayer}</div> <!-- Nama solat di atas -->
+          <div>${prayerTimes[prayer]}</div> <!-- Waktu solat di bawah -->
         `;
         prayerDiv.appendChild(column);
       });
 
-      if (closestCountdown !== null) {
-        const countdownEl = document.getElementById('countdown-timer');
-        countdownEl.textContent = formatCountdown(closestCountdown);
-        countdownInterval = setInterval(function() {
-          closestCountdown--;
-          countdownEl.textContent = formatCountdown(closestCountdown);
-        }, 1000);
-      }
+      countdownInterval = setInterval(() => {
+        const countdown = closestCountdown--;
+        if (countdown >= 0) {
+          document.getElementById('countdown-timer').textContent = formatCountdown(countdown);
+        }
+      }, 1000);
     }
 
     setInterval(updateClock, 1000);
     setInterval(getPrayerTimes, 60000);
-    updateClock();
     getPrayerTimes();
   </script>
 </body>
