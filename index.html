@@ -1,3 +1,4 @@
+<!-- GANTI SELURUH ISI FILE DENGAN INI -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -34,7 +35,7 @@
       display: flex;
       flex-direction: column;
       height: 100%;
-      padding: 20px 40px 90px 40px; /* beri ruang bawah untuk running text */
+      padding: 20px 40px calc(1cm + 38px) 40px;
       justify-content: space-between;
     }
     .header {
@@ -57,6 +58,12 @@
       font-size: 20px;
       margin-top: 8px;
       color: #ffff00;
+    }
+    #countdown-timer {
+      color: #ffcc00;
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 10px;
     }
     .info-masjid {
       text-align: right;
@@ -92,42 +99,24 @@
       font-weight: bold;
       color: white;
     }
-    /* Mengubah warna kolom solat menjadi lebih solid dan tegas */
-    .subuh {
-      background-color: #008000; /* Hijau solid */
+    .subuh { background-color: #008000; }
+    .dhuhr { background-color: #ff6600; }
+    .ashar { background-color: #0066cc; }
+    .maghrib { background-color: #cc0000; }
+    .isya { background-color: #660066; }
+
+    /* Highlight salat berikutnya dengan border blinking */
+    .next-prayer {
+      border: 5px solid #ffcc00;
+      animation: pulse 1s infinite;
     }
-    .dhuhr {
-      background-color: #ff6600; /* Oranye solid */
+
+    @keyframes pulse {
+      0% { border-color: #ffcc00; box-shadow: 0 0 8px #ffcc00; }
+      50% { border-color: #ffff00; box-shadow: 0 0 16px #ffff00; }
+      100% { border-color: #ffcc00; box-shadow: 0 0 8px #ffcc00; }
     }
-    .ashar {
-      background-color: #0066cc; /* Biru solid */
-    }
-    .maghrib {
-      background-color: #cc0000; /* Merah solid */
-    }
-    .isya {
-      background-color: #660066; /* Ungu gelap solid */
-    }
-    .highlight {
-      background-color: #8B0000;
-      background-image: linear-gradient(to bottom, #8B0000, #7F0000);
-    }
-    .azan-column {
-      background-color: #8B0000;
-      color: white;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      min-width: 120px;
-      flex: 1;
-      font-size: 24px;
-      font-weight: bold;
-    }
-    #countdown-timer {
-      color: #ffcc00;
-      font-size: 20px;
-      font-weight: bold;
-    }
+
     .running-text {
       position: fixed;
       bottom: 0;
@@ -141,27 +130,16 @@
       overflow: hidden;
       z-index: 2;
     }
+
     .running-text span {
       display: inline-block;
       padding-left: 100%;
       animation: scroll 55s linear infinite;
     }
+
     @keyframes scroll {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
-    }
-
-    /* Tanda untuk solat yang akan datang */
-    .next-prayer {
-      border: 3px solid #ffcc00;
-      background-color: rgba(255, 204, 0, 0.6);
-      animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
-      50% { box-shadow: 0 0 25px rgba(255, 204, 0, 1); }
-      100% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
     }
   </style>
 </head>
@@ -172,6 +150,7 @@
       <div class="clock-box">
         <div class="clock" id="clock">--:--:--</div>
         <div class="date" id="date">Loading date...</div>
+        <div id="countdown-timer">Sisa Waktu: --:--:--</div>
       </div>
       <div class="info-masjid">
         <div class="masjid-name">Masjid Al Huda Komplek Rajawali Bandara</div>
@@ -250,12 +229,19 @@
         prayerDiv.innerHTML += html;
       });
 
-      document.getElementById('countdown-timer').textContent = `Sisa Waktu: ${formatCountdown(closestCountdown)}`;
+      if (closestCountdown !== null) {
+        document.getElementById('countdown-timer').textContent = `Sisa Waktu: ${formatCountdown(closestCountdown)}`;
+        countdownInterval = setInterval(() => {
+          closestCountdown--;
+          document.getElementById('countdown-timer').textContent = `Sisa Waktu: ${formatCountdown(closestCountdown)}`;
+        }, 1000);
+      } else {
+        document.getElementById('countdown-timer').textContent = `Sisa Waktu: --:--:--`;
+      }
     }
 
     setInterval(updateClock, 1000);
     setInterval(getPrayerTimes, 60000);
-
     updateClock();
     getPrayerTimes();
   </script>
