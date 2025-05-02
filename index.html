@@ -5,17 +5,12 @@
   <title>Jadwal Salat Masjid</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    /* Gaya CSS sesuai permintaan Anda */
     body {
+      margin: 0;
       font-family: sans-serif;
-      background-image: url('https://your-image-url.jpg'); /* ganti dengan gambar masjid */
-      background-size: cover;
-      background-position: center;
-      color: white;
+      background-color: #000;
+      color: #fff;
     }
     .container {
       display: flex;
@@ -168,12 +163,13 @@
     setInterval(updateTime, 1000);
     updateTime();
 
-    // Untuk contoh highlight waktu salat berikutnya
+    // Highlight salat berikutnya (contoh: Ashar)
     function highlightNextPrayer() {
-      const next = document.getElementById('ashar'); // contoh: Ashar berikutnya
+      const next = document.getElementById('ashar');
       next.classList.add('highlight');
     }
     highlightNextPrayer();
   </script>
 </body>
 </html>
+
