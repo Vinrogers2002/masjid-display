@@ -86,11 +86,11 @@
       padding: 16px;
       border-radius: 12px;
       text-align: center;
-      flex: 1;
-      min-width: 130px;
+      flex: 2;
+      min-width: 150px;
       color: white;
       font-weight: bold;
-      font-size: 20px;
+      font-size: 24px;
     }
     .highlight {
       border: 4px solid yellow;
@@ -137,6 +137,10 @@
       flex: 1;  /* Agar lebar kolom azan dan iqamah sama dengan lebar kolom jam */
       text-align: center;
     }
+    .azan-box .time, .iqamah-box .time {
+      margin-top: 10px;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
@@ -150,10 +154,12 @@
         </div>
         <div class="azan-iqamah-row">
           <div class="azan-box">
-            <div><strong>Adzan:</strong> <span id="countdown-timer">--:--:--</span></div>
+            <div><strong>Adzan:</strong></div>
+            <div class="time" id="countdown-timer">--:--:--</div>
           </div>
           <div class="iqamah-box">
-            <div><strong>Iqamah:</strong> +10 menit</div>
+            <div><strong>Iqamah:</strong></div>
+            <div class="time">+10 menit</div>
           </div>
         </div>
       </div>
@@ -209,7 +215,7 @@
       const prayerDiv = document.getElementById('prayer-times');
       prayerDiv.innerHTML = '';
 
-      const colors = ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#03A9F4'];
+      const colors = ['#4CAF50', '#2196F3', '#FF9800', '#FF5722', '#9C27B0'];
       const timesList = Object.keys(prayerTimes);
       let closestPrayer = null;
       let closestTime = null;
