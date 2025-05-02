@@ -61,17 +61,22 @@
       margin-top: 8px;
       color: #ffff00;
     }
-    .azan-iqamah {
-      background-color: #8B0000;
-      color: #ffff00;
-      padding: 10px;
-      border-radius: 10px;
+    .azan-iqamah-row {
+      display: flex;
+      gap: 12px;
       margin-top: 10px;
-      font-size: 18px;
-      min-width: 180px;
     }
     .info-masjid {
       text-align: right;
+    }
+    .azan-box, .iqamah-box {
+      background-color: #8B0000;
+      color: #ffff00;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 18px;
+      min-width: 160px;
+      text-align: center;
     }
     .masjid-name {
       font-size: 48px;
@@ -140,9 +145,9 @@
           <div class="clock" id="clock">--:--:--</div>
           <div class="date" id="date">Memuat tanggal...</div>
         </div>
-        <div class="azan-iqamah">
-          <div><strong>Adzan:</strong> <span id="countdown-timer">--:--:--</span></div>
-          <div style="margin-top: 6px;"><strong>Iqamah:</strong> +10 menit</div>
+        <div class="azan-iqamah-row">
+          <div> class="azan-box"><strong>Adzan:</strong> <span id="countdown-timer">--:--:--</span></div>
+          <div class="iqamah-box"><strong>Iqamah:</strong> +10 menit</div>
         </div>
       </div>
       <div class="info-masjid">
