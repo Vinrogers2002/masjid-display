@@ -9,19 +9,18 @@
       margin: 0;
       padding: 0;
       font-family: 'Arial', sans-serif;
-      background: url('https://c0.wallpaperflare.com/path/828/532/1011/masjid-nabawi-i-ve-to-medina-medina-minaret-0e9e43cec7c84c66c2c64bbe00637ed7.jpg') no-repeat center center fixed;
+      background: #000 url('https://images.unsplash.com/photo-1614852202114-05e25c0876b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
       background-size: cover;
-      color: #ffff00;
       height: 100%;
       overflow: hidden;
+      color: #ffff00;
     }
 
     .overlay {
       position: absolute;
       top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.4);
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.4);
       z-index: 0;
     }
 
@@ -31,8 +30,8 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+      padding: 20px 40px;
       justify-content: space-between;
-      padding: 20px 40px 50px;
     }
 
     .header {
@@ -51,23 +50,32 @@
     .clock {
       font-size: 64px;
       font-weight: bold;
-      color: #ffff00;
     }
 
     .date {
       font-size: 20px;
+      margin-top: 5px;
+    }
+
+    .countdown-box {
       margin-top: 8px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 12px;
+      padding: 10px 20px;
       color: #ffff00;
+      font-size: 22px;
+      line-height: 1.4;
+      text-align: center;
     }
 
     .info-masjid {
       text-align: right;
-      color: #ffff00;
     }
 
-    .info-masjid .masjid-name {
-      font-size: 32px;
+    .masjid-name {
+      font-size: 30px;
       font-weight: bold;
+      margin-bottom: 8px;
     }
 
     .info-masjid h3, .info-masjid h4 {
@@ -89,41 +97,29 @@
       border-radius: 10px;
       text-align: center;
       color: white;
-      background-color: #555;
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(2px);
     }
 
     .prayer-column span:first-child {
+      display: block;
       font-size: 18px;
       font-weight: bold;
     }
 
     .prayer-column span:last-child {
+      display: block;
       font-size: 22px;
-      margin-top: 4px;
     }
 
     .highlight-border {
       animation: blink-border 1s infinite alternate;
-      border: 4px solid #ffff00;
+      border: 3px solid #ffff00;
     }
 
     @keyframes blink-border {
       0% { border-color: #ffff00; }
       100% { border-color: transparent; }
-    }
-
-    .countdown-box {
-      margin-top: 10px;
-      background: rgba(0,0,0,0.6);
-      border-radius: 12px;
-      padding: 10px 20px;
-      color: #ffff00;
-      text-align: center;
-    }
-
-    .countdown-box span {
-      display: block;
-      font-size: 20px;
     }
 
     .running-text {
@@ -132,7 +128,7 @@
       width: 100%;
       background: #000;
       color: #fff;
-      font-size: 24px;
+      font-size: 28px;
       padding: 10px 0;
       white-space: nowrap;
       overflow: hidden;
@@ -149,6 +145,10 @@
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
+
+    .middle-section {
+      margin-bottom: 50px; /* Untuk jarak ~1 cm dari running text */
+    }
   </style>
 </head>
 <body>
@@ -161,8 +161,8 @@
           <div class="date" id="date">Memuat tanggal...</div>
         </div>
         <div class="countdown-box">
-          <span>Adzan: <span id="adzan-countdown">--:--</span></span>
-          <span>Iqamah: <span id="iqamah-countdown">--:--</span></span>
+          <div>Adzan: <span id="adzan-countdown">--:--</span></div>
+          <div>Iqamah: <span id="iqamah-countdown">--:--</span></div>
         </div>
       </div>
       <div class="info-masjid">
@@ -172,11 +172,13 @@
       </div>
     </div>
 
-    <div class="prayer-times" id="prayer-times"></div>
+    <div class="middle-section">
+      <div class="prayer-times" id="prayer-times"></div>
+    </div>
   </div>
 
   <div class="running-text">
-    <span>Pengumuman: Pelatihan Tilawatil Quran setiap Sabtu ba’da Isya bersama Ust. Muhammad Yunus (Qori' Senior Kota Batam) | Tetap jaga kebersihan masjid | Al-Ankabut: 45 - "Bacalah Al-Qur'an dan dirikanlah shalat..."</span>
+    <span>Pengumuman: Kajian rutin ba’da Maghrib setiap malam Selasa | Pelatihan Qiro' setiap Sabtu malam bersama Ust. Yunus | Kebersihan sebagian dari iman | Tetap jaga ketertiban dan keheningan dalam masjid.</span>
   </div>
 
   <script>
@@ -258,3 +260,4 @@
   </script>
 </body>
 </html>
+
