@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jadwal Sholat Masjid</title>
   <style>
     * {
@@ -13,48 +13,54 @@
 
     body {
       font-family: 'Arial', sans-serif;
-      background: url('https://c0.wallpaperflare.com/path/828/532/1011/masjid-nabawi-i-ve-to-medina-medina-minaret-0e9e43cec7c84c66c2c64bbe00637ed7.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-    }
-
-    /* Layout utama */
-    .container {
-      position: relative;
-      width: 100%;
-      height: 100vh;
+      background: #333;
+      color: white;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
+      height: 100vh;
       padding: 20px;
     }
 
-    /* Info Panel */
+    /* Kontainer Utama */
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      width: 100%;
+    }
+
+    /* Panel Info (Nama Masjid dan Imam) */
     .info-panel {
-      position: absolute;
-      top: 20px;
-      left: 30px;
       font-size: 20px;
       font-weight: bold;
-      color: #ffff00;
+      text-align: left;
+      width: 100%;
+      padding: 10px;
+      color: #FFD700;
     }
 
     .masjid-name {
       font-size: 32px;
     }
 
+    .imam-info {
+      font-size: 20px;
+    }
+
     /* Jam dan Tanggal */
     .clock-container {
       position: absolute;
       top: 20px;
-      right: 30px;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 15px 20px;
+      right: 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 15px 25px;
       border-radius: 10px;
-      color: #ffff00;
-      text-align: right;
-      font-size: 20px;
+      color: #FFD700;
+      text-align: center;
     }
 
     .clock {
@@ -70,20 +76,22 @@
     .prayer-times {
       display: flex;
       justify-content: center;
-      width: 90%;
-      margin-top: 120px;
+      width: 100%;
+      margin-top: 100px;
+      padding: 10px;
     }
 
     .prayer-column {
       flex: 1;
       background-color: #4CAF50;
-      padding: 25px;
       margin: 5px;
-      border-radius: 10px;
+      padding: 20px;
       text-align: center;
-      font-size: 28px;
-      transition: background-color 0.3s ease-in-out;
-      color: #fff;
+      font-size: 24px;
+      border-radius: 10px;
+      transition: background-color 0.3s ease;
+      color: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     }
 
     .highlight {
@@ -121,10 +129,10 @@
       position: absolute;
       top: 150px;
       right: 30px;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.7);
       padding: 15px 20px;
       border-radius: 10px;
-      color: #ffff00;
+      color: #FFD700;
       text-align: center;
       font-size: 20px;
     }
@@ -139,7 +147,7 @@
       margin-bottom: 10px;
     }
 
-    /* Hover effect pada kolom solat */
+    /* Hover Effect Kolom Solat */
     .prayer-column:hover {
       background-color: #45a049;
     }
@@ -147,12 +155,13 @@
   </style>
 </head>
 <body>
+
   <div class="container">
     <!-- Info Panel -->
     <div class="info-panel">
       <div class="masjid-name">Masjid Al Huda Komplek Rajawali Bandara</div>
-      <div>Imam: Ust. Lalu Ami Aziz Saputra S.Ag</div>
-      <div>Bilal: Ust. Junaidi</div>
+      <div class="imam-info">Imam: Ust. Lalu Ami Aziz Saputra S.Ag</div>
+      <div class="imam-info">Bilal: Ust. Junaidi</div>
     </div>
 
     <!-- Jam dan Tanggal -->
@@ -163,7 +172,7 @@
 
     <!-- Kolom Solat -->
     <div class="prayer-times" id="prayer-times">
-      <!-- Kolom solat akan dimasukkan di sini melalui JavaScript -->
+      <!-- Kolom Solat akan diisi oleh JavaScript -->
     </div>
 
     <!-- Running Text -->
@@ -266,5 +275,6 @@
     getPrayerTimes();
     setInterval(getPrayerTimes, 60000);
   </script>
+
 </body>
 </html>
