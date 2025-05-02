@@ -1,275 +1,179 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jadwal Sholat Masjid</title>
+  <meta charset="UTF-8">
+  <title>Jadwal Salat Masjid</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('https://c0.wallpaperflare.com/path/828/532/1011/masjid-nabawi-i-ve-to-medina-medina-minaret-0e9e43cec7c84c66c2c64bbe00637ed7.jpg') no-repeat center center fixed;
+    body {
+      font-family: sans-serif;
+      background-image: url('https://your-image-url.jpg'); /* ganti dengan gambar masjid */
       background-size: cover;
-      color: #ffff00;
-    }
-    .overlay {
-      background: rgba(0, 0, 0, 0.4);
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
+      background-position: center;
+      color: white;
     }
     .container {
-      position: relative;
-      z-index: 1;
       display: flex;
       flex-direction: column;
-      height: 100%;
-      padding: 20px 40px;
+      height: 100vh;
       justify-content: space-between;
+      padding: 1vh 2vw;
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-    .clock-section {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
-    .clock-box {
-      background: rgba(0,0,0,0.6);
-      padding: 10px 20px;
-      border-radius: 12px;
+    .masjid-info {
       text-align: center;
-    }
-    .clock {
-      font-size: 64px;
+      font-size: 2vw;
       font-weight: bold;
-      color: #ffff00;
+      margin-top: 1vh;
     }
-    .date {
-      font-size: 20px;
-      margin-top: 8px;
-      color: #ffff00;
-    }
-    .azan-iqamah-row {
-      display: flex;
-      gap: 10px;
-    }
-    .azan-iqamah-box {
-      background-color: #000;
-      color: #ffff00;
-      padding: 10px 20px;
-      border-radius: 10px;
-      width: 120px;
-      text-align: center;
-    }
-    .azan-iqamah-box strong {
-      font-size: 20px;
-      display: block;
-      margin-bottom: 4px;
-    }
-    .azan-iqamah-box span {
-      font-size: 20px;
-    }
-    .info-masjid {
-      text-align: right;
-    }
-    .masjid-name {
-      font-size: 48px;
-      font-weight: bold;
-      color: #ffff00;
-    }
-    .info-masjid h3, .info-masjid h4 {
-      font-size: 24px;
-      color: #ffff00;
-    }
-    .prayer-times {
+    .time-section {
       display: flex;
       justify-content: center;
-      gap: 16px;
+      gap: 2vw;
+      margin-top: 2vh;
       flex-wrap: wrap;
-      margin-bottom: 80px;
     }
-    .prayer-column {
-      background-color: #66cc66;
-      padding: 20px;
+    .time-box {
+      width: 12vw;
+      padding: 1vh;
       border-radius: 12px;
       text-align: center;
-      flex: 1;
-      min-width: 140px;
-      color: white;
+      font-size: 1.5vw;
       font-weight: bold;
-      font-size: 24px;
     }
-    .prayer-column span {
-      display: block;
-    }
+    .subuh { background-color: green; }
+    .zuhur { background-color: blue; }
+    .ashar { background-color: gold; color: black; }
+    .magrib { background-color: red; }
+    .isya { background-color: purple; }
     .highlight {
-      border: 4px solid yellow;
+      border: 4px solid orange;
       animation: blink 1s infinite;
     }
     @keyframes blink {
-      0%, 100% { border-color: yellow; }
+      0%, 100% { border-color: orange; }
       50% { border-color: transparent; }
     }
+    .bottom-section {
+      display: flex;
+      justify-content: space-evenly;
+      background-color: black;
+      padding: 1vh;
+      border-radius: 12px;
+      font-size: 1.3vw;
+    }
+    .countdown-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 15vw;
+    }
+    .countdown-box .label {
+      font-size: 1.2vw;
+      font-weight: bold;
+      margin-bottom: 0.5vh;
+    }
+    .countdown-box .time {
+      font-size: 2vw;
+      font-weight: bold;
+    }
+    .clock {
+      background-color: black;
+      padding: 1vh 2vw;
+      border-radius: 12px;
+      font-size: 3vw;
+      font-weight: bold;
+      text-align: center;
+      color: yellow;
+    }
     .running-text {
+      background-color: black;
+      color: white;
+      padding: 1vh 0;
+      font-size: 1.3vw;
+      text-align: center;
       position: fixed;
       bottom: 0;
-      left: 0;
       width: 100%;
-      background: #000;
-      color: #fff;
-      padding: 16px 0;
-      font-size: 24px;
       white-space: nowrap;
       overflow: hidden;
-      z-index: 2;
     }
-    .running-text span {
+    .marquee {
       display: inline-block;
       padding-left: 100%;
-      animation: scroll 60s linear infinite;
+      animation: marquee 20s linear infinite;
     }
-    @keyframes scroll {
+    @keyframes marquee {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
   </style>
 </head>
 <body>
-  <div class="overlay"></div>
   <div class="container">
-    <div class="header">
-      <div class="clock-section">
-        <div class="clock-box">
-          <div class="clock" id="clock">--:--:--</div>
-          <div class="date" id="date">Loading date...</div>
-        </div>
-        <div class="azan-iqamah-row">
-          <div class="azan-iqamah-box">
-            <strong>Adzan</strong>
-            <span id="countdown-timer">--:--:--</span>
-          </div>
-          <div class="azan-iqamah-box">
-            <strong>Iqamah</strong>
-            <span>+10 menit</span>
-          </div>
-        </div>
+    <div class="masjid-info">MASJID RAYA AL-BARKAH</div>
+
+    <div class="time-section" id="prayer-times">
+      <div class="time-box subuh" id="subuh">
+        <div>Subuh</div>
+        <div>04:45</div>
       </div>
-      <div class="info-masjid">
-        <div class="masjid-name">Masjid Al Huda Komplek Rajawali Bandara</div>
-        <h3>Imam: Ust. Lalu Ami Aziz Saputra S.Ag</h3>
-        <h4>Bilal: Ust. Junaidi</h4>
+      <div class="time-box zuhur" id="zuhur">
+        <div>Zuhur</div>
+        <div>12:00</div>
+      </div>
+      <div class="time-box ashar" id="ashar">
+        <div>Ashar</div>
+        <div>15:20</div>
+      </div>
+      <div class="time-box magrib" id="magrib">
+        <div>Maghrib</div>
+        <div>18:05</div>
+      </div>
+      <div class="time-box isya" id="isya">
+        <div>Isya</div>
+        <div>19:15</div>
       </div>
     </div>
 
-    <div class="prayer-times" id="prayer-times"></div>
+    <div class="bottom-section">
+      <div class="countdown-box" id="iqamah-box">
+        <div class="label">IQAMAH</div>
+        <div class="time" id="iqamah-time">00 05 30</div>
+      </div>
+      <div class="clock" id="current-time">12:34:56</div>
+      <div class="countdown-box" id="azan-box">
+        <div class="label">ADZAN</div>
+        <div class="time" id="azan-time">00 10 00</div>
+      </div>
+    </div>
   </div>
 
   <div class="running-text">
-    <span>Pengumuman: Pelatihan Tilawatil Quran setiap Sabtu ba'da Isya, bersama Ust. Muhammad Yunus (Qori' Senior Kota Batam) | Jaga kebersihan masjid | "Bacalah apa yang telah diwahyukan kepadamu, yaitu Al-Quran dan dirikanlah shalat..." (Al Ankabut: 45)</span>
+    <div class="marquee">Selamat datang di Masjid Raya Al-Barkah | Info imam: Ust. Ahmad Zainuri | Kajian ba'da Isya setiap malam Jumat</div>
   </div>
 
   <script>
-    const prayerTimes = {
-      'Subuh': '04:37',
-      'Dzuhur': '12:07',
-      'Ashar': '15:21',
-      'Maghrib': '18:06',
-      'Isya': '19:17'
-    };
-
-    function updateClock() {
+    function updateTime() {
       const now = new Date();
       const jam = now.getHours().toString().padStart(2, '0');
       const menit = now.getMinutes().toString().padStart(2, '0');
       const detik = now.getSeconds().toString().padStart(2, '0');
-      document.getElementById('clock').textContent = `${jam}:${menit}:${detik}`;
-
-      const hari = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-      const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-      const tgl = `${hari[now.getDay()]}, ${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
-      document.getElementById('date').textContent = tgl;
+      document.getElementById('current-time').textContent = `${jam}:${menit}:${detik}`;
     }
+    setInterval(updateTime, 1000);
+    updateTime();
 
-    function formatCountdown(seconds) {
-      const hours = Math.floor(seconds / 3600);
-      const minutes = Math.floor((seconds % 3600) / 60);
-      const remainingSeconds = seconds % 60;
-      return `${String(hours).padStart(2, '0')}${String(minutes).padStart(2, '0')}${String(remainingSeconds).padStart(2, '0')}`;
+    // Untuk contoh highlight waktu salat berikutnya
+    function highlightNextPrayer() {
+      const next = document.getElementById('ashar'); // contoh: Ashar berikutnya
+      next.classList.add('highlight');
     }
-
-    let countdownInterval;
-
-    function getPrayerTimes() {
-      clearInterval(countdownInterval);
-
-      const now = new Date();
-      const prayerDiv = document.getElementById('prayer-times');
-      prayerDiv.innerHTML = '';
-
-      const colors = {
-        'Subuh': '#4CAF50',
-        'Dzuhur': '#2196F3',
-        'Ashar': '#FFEB3B',
-        'Maghrib': '#FF0000',
-        'Isya': '#800080'
-      };
-
-      let closestPrayer = null;
-      let closestTime = null;
-      let closestCountdown = null;
-
-      for (const [prayer, time] of Object.entries(prayerTimes)) {
-        const [hours, minutes] = time.split(':').map(Number);
-        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
-
-        const column = document.createElement('div');
-        column.classList.add('prayer-column');
-        column.style.backgroundColor = colors[prayer] || '#666';
-
-        if (!closestPrayer && now < prayerDate) {
-          closestPrayer = prayer;
-          closestTime = prayerDate;
-          closestCountdown = Math.floor((prayerDate - now) / 1000);
-          column.classList.add('highlight');
-        }
-
-        column.innerHTML = `
-          <span style="font-size: 26px;">${prayer}</span>
-          <span style="font-size: 28px;">${time}</span>
-        `;
-        prayerDiv.appendChild(column);
-      }
-
-      if (closestCountdown !== null) {
-        const countdownEl = document.getElementById('countdown-timer');
-        countdownEl.textContent = formatCountdown(closestCountdown);
-        countdownInterval = setInterval(() => {
-          if (closestCountdown <= 0) {
-            clearInterval(countdownInterval);
-          } else {
-            closestCountdown--;
-            countdownEl.textContent = formatCountdown(closestCountdown);
-          }
-        }, 1000);
-      }
-    }
-
-    setInterval(updateClock, 1000);
-    setInterval(getPrayerTimes, 60000);
-    getPrayerTimes();
+    highlightNextPrayer();
   </script>
 </body>
 </html>
