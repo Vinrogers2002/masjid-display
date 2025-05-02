@@ -2,182 +2,248 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jadwal Salat Masjid Al-Huda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jadwal Sholat Masjid</title>
   <style>
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
-    body {
-      font-family: Arial, sans-serif;
-      background: url('https://i.ibb.co/HzKdW5V/masjid-bg-clear.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: yellow;
+    html, body {
+      width: 100%;
+      height: 100%;
       overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://c0.wallpaperflare.com/path/828/532/1011/masjid-nabawi-i-ve-to-medina-medina-minaret-0e9e43cec7c84c66c2c64bbe00637ed7.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #ffff00;
+    }
+    .overlay {
+      background: rgba(0, 0, 0, 0.3);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 20px 40px;
+      justify-content: space-between;
     }
     .header {
       display: flex;
       justify-content: space-between;
-      padding: 15px 25px;
-      background: rgba(0, 0, 0, 0.5);
+      align-items: flex-start;
     }
-    .clock-area {
+    .clock-section {
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
     }
-    .clock {
-      font-size: 60px;
-      font-weight: bold;
-    }
-    .date {
-      font-size: 22px;
-    }
-    .countdowns {
-      display: flex;
-      gap: 15px;
-      margin-top: 10px;
-    }
-    .countdown-box {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 10px;
-      border-radius: 10px;
-      min-width: 100px;
+    .clock-box {
+      background: rgba(0,0,0,0.6);
+      padding: 10px 20px;
+      border-radius: 12px;
       text-align: center;
     }
-    .countdown-title {
-      font-size: 18px;
+    .clock {
+      font-size: 64px;
       font-weight: bold;
+      color: #ffff00;
     }
-    .countdown-time {
-      font-size: 24px;
+    .date {
+      font-size: 20px;
+      margin-top: 8px;
+      color: #ffff00;
+    }
+    .azan-iqamah {
+      background-color: #8B0000;
+      color: #ffff00;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-size: 18px;
+      min-width: 180px;
     }
     .info-masjid {
       text-align: right;
     }
-    .info-masjid h1 {
-      font-size: 32px;
+    .masjid-name {
+      font-size: 48px;
       font-weight: bold;
+      color: #ffff00;
     }
     .info-masjid h3, .info-masjid h4 {
-      font-size: 22px;
-      margin-top: 5px;
+      font-size: 24px;
+      color: #ffff00;
     }
-    .jadwal-salat {
-      position: absolute;
-      bottom: 60px;
-      width: 100%;
+    .prayer-times {
       display: flex;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
     }
-    .salat-box {
-      background: rgba(0, 100, 0, 0.8);
-      padding: 10px;
-      border-radius: 10px;
+    .prayer-column {
+      background-color: #66cc66;
+      background-image: linear-gradient(to bottom, #66cc66, #99e699);
+      padding: 16px;
+      border-radius: 12px;
       text-align: center;
-      width: 120px;
-      border: 4px solid transparent;
-    }
-    .salat-box.active {
-      border-color: yellow;
-      animation: blink-border 1s infinite;
-    }
-    @keyframes blink-border {
-      0% { border-color: yellow; }
-      50% { border-color: transparent; }
-      100% { border-color: yellow; }
-    }
-    .nama-salat {
-      font-size: 20px;
+      flex: 1;
+      min-width: 130px;
+      color: white;
       font-weight: bold;
+      font-size: 20px;
     }
-    .waktu {
-      font-size: 22px;
-      margin-top: 5px;
+    .highlight {
+      border: 4px solid yellow;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { border-color: yellow; }
+      50% { border-color: transparent; }
     }
     .running-text {
-      position: absolute;
+      position: fixed;
       bottom: 0;
+      left: 0;
       width: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: #000;
+      color: #fff;
+      padding: 16px 0;
       font-size: 26px;
       white-space: nowrap;
       overflow: hidden;
-      padding: 8px 0;
+      z-index: 2;
     }
     .running-text span {
       display: inline-block;
       padding-left: 100%;
-      animation: scroll 20s linear infinite;
+      animation: scroll 60s linear infinite;
     }
     @keyframes scroll {
-      0% { transform: translateX(0); }
+      0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <div class="clock-area">
-      <div class="clock" id="clock">00:00:00</div>
-      <div class="date" id="date">Hari, Tanggal</div>
-      <div class="countdowns">
-        <div class="countdown-box">
-          <div class="countdown-title">Adzan</div>
-          <div class="countdown-time" id="countdown-adzan">00:00</div>
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="header">
+      <div class="clock-section">
+        <div class="clock-box">
+          <div class="clock" id="clock">--:--:--</div>
+          <div class="date" id="date">Loading date...</div>
         </div>
-        <div class="countdown-box">
-          <div class="countdown-title">Iqamah</div>
-          <div class="countdown-time" id="countdown-iqamah">00:00</div>
+        <div class="azan-iqamah">
+          <div><strong>Adzan:</strong> <span id="countdown-timer">--:--:--</span></div>
+          <div style="margin-top: 6px;"><strong>Iqamah:</strong> +10 menit</div>
         </div>
       </div>
+      <div class="info-masjid">
+        <div class="masjid-name">Masjid Al Huda Komplek Rajawali Bandara</div>
+        <div id="current-date">Kamis, 01 Mei 2025 / 03 Zulkaidah 1446 H</div>
+        <h3>Imam: Ust. Lalu Ami Aziz Saputra S.Ag</h3>
+        <h4>Bilal: Ust. Junaidi</h4>
+      </div>
     </div>
-    <div class="info-masjid">
-      <h1>Masjid Al-Huda Komplek Rajawali Bandara</h1>
-      <h3>Hari: Jumat, 02 Mei 2025</h3>
-      <h4>Imam: Ust. Lalu Ami Aziz Saputra S.Ag</h4>
-    </div>
-  </div>
 
-  <div class="jadwal-salat">
-    <div class="salat-box">
-      <div class="nama-salat">Subuh</div>
-      <div class="waktu">04:45</div>
-    </div>
-    <div class="salat-box">
-      <div class="nama-salat">Dzuhur</div>
-      <div class="waktu">12:10</div>
-    </div>
-    <div class="salat-box active">
-      <div class="nama-salat">Ashar</div>
-      <div class="waktu">15:20</div>
-    </div>
-    <div class="salat-box">
-      <div class="nama-salat">Maghrib</div>
-      <div class="waktu">18:15</div>
-    </div>
-    <div class="salat-box">
-      <div class="nama-salat">Isya</div>
-      <div class="waktu">19:30</div>
-    </div>
+    <div class="prayer-times" id="prayer-times"></div>
   </div>
 
   <div class="running-text">
-    <span>Selamat datang di Masjid Al-Huda. Mari kita jaga kebersihan, ketertiban, dan kekhusyukan dalam beribadah. Terima kasih.</span>
+    <span>Pengumuman: Pelatihan Tilawatil Quran setiap Sabtu ba'da Isya, bersama Ust. Muhammad Yunus (Qori' Senior Kota Batam) | Jaga kebersihan masjid | "Bacalah apa yang telah diwahyukan kepadamu, yaitu Al-Quran dan dirikanlah shalat..." (Al Ankabut: 45)</span>
   </div>
 
   <script>
+    const prayerTimes = {
+      'Subuh': '04:37',
+      'Dzuhur': '12:07',
+      'Ashar': '15:21',
+      'Maghrib': '18:06',
+      'Isya': '19:17'
+    };
+
     function updateClock() {
       const now = new Date();
-      document.getElementById("clock").textContent = now.toLocaleTimeString("id-ID", { hour12: false });
-      document.getElementById("date").textContent = now.toLocaleDateString("id-ID", {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-      });
+      const jam = now.getHours().toString().padStart(2, '0');
+      const menit = now.getMinutes().toString().padStart(2, '0');
+      const detik = now.getSeconds().toString().padStart(2, '0');
+      document.getElementById('clock').textContent = `${jam}:${menit}:${detik}`;
+
+      const hari = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      const tgl = `${hari[now.getDay()]}, ${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
+      document.getElementById('date').textContent = tgl;
     }
-    setInterval(updateClock, 1000);
+
+    function formatCountdown(seconds) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const remainingSeconds = seconds % 60;
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
+
+    let countdownInterval;
+
+    function getPrayerTimes() {
+      clearInterval(countdownInterval);
+
+      const now = new Date();
+      const prayerDiv = document.getElementById('prayer-times');
+      prayerDiv.innerHTML = '';
+
+      const colors = ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#03A9F4'];
+      const timesList = Object.keys(prayerTimes);
+      let closestPrayer = null;
+      let closestTime = null;
+      let closestCountdown = null;
+
+      timesList.forEach((prayer, i) => {
+        const [hours, minutes] = prayerTimes[prayer].split(':').map(Number);
+        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+
+        if (now < prayerDate && !closestPrayer) {
+          closestPrayer = prayer;
+          closestTime = prayerDate;
+          closestCountdown = Math.floor((prayerDate - now) / 1000);
+        }
+
+        const column = document.createElement('div');
+        column.classList.add('prayer-column');
+        column.style.background = colors[i % colors.length];
+
+        if (prayer === closestPrayer) column.classList.add('highlight');
+
+        column.innerHTML = `
+          <span>${prayer}</span>
+          <span>${prayerTimes[prayer]}</span>
+        `;
+        prayerDiv.appendChild(column);
+      });
+
+      if (closestCountdown !== null) {
+        const countdownEl = document.getElementById('countdown-timer');
+        countdownEl.textContent = formatCountdown(closestCountdown);
+        countdownInterval = setInterval(() => {
+          closestCountdown--;
+          if (countdownEl) countdownEl.textContent = formatCountdown(closestCountdown);
+          if (closestCountdown <= 0) getPrayerTimes();
+        }, 1000);
+      }
+    }
+
     updateClock();
+    setInterval(updateClock, 1000);
+    getPrayerTimes();
+    setInterval(getPrayerTimes, 60000);
   </script>
 </body>
 </html>
