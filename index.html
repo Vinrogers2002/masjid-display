@@ -77,33 +77,20 @@
       margin-top: 20px;
     }
     .prayer-column {
-      padding: 10px;
-      border-radius: 10px;
+      background-color: #66cc66;
+      background-image: linear-gradient(to bottom, #66cc66, #99e699);
+      padding: 20px; /* Meningkatkan padding agar kolom lebih lebar */
+      border-radius: 12px; /* Sedikit melengkungkan sudut */
       text-align: center;
-      min-width: 100px;
+      min-width: 120px; /* Menambah lebar minimum kolom */
       flex: 1;
+      font-size: 24px; /* Menambah ukuran font */
       font-weight: bold;
       color: white;
     }
-    .subuh {
-      background-color: #66cc66;
-      background-image: linear-gradient(to bottom, #66cc66, #99e699);
-    }
-    .dhuhr {
-      background-color: #ffcc00;
-      background-image: linear-gradient(to bottom, #ffcc00, #ffdf80);
-    }
-    .ashar {
-      background-color: #ff6666;
-      background-image: linear-gradient(to bottom, #ff6666, #ff9999);
-    }
-    .maghrib {
-      background-color: #ff6600;
-      background-image: linear-gradient(to bottom, #ff6600, #ff9933);
-    }
-    .isya {
-      background-color: #6600cc;
-      background-image: linear-gradient(to bottom, #6600cc, #9933ff);
+    .prayer-column span {
+      display: block; /* Membuat teks dalam span lebih teratur */
+      font-size: 28px; /* Ukuran font yang lebih besar untuk teks */
     }
     .highlight {
       background-color: #8B0000;
@@ -113,9 +100,9 @@
       background-color: #8B0000;
       color: white;
       padding: 10px;
-      border-radius: 10px;
+      border-radius: 12px;
       text-align: center;
-      min-width: 100px;
+      min-width: 120px;
       flex: 1;
     }
     #countdown-timer {
@@ -228,7 +215,7 @@
                         <span>${prayerTimes[prayer]}</span>
                       </div>`;
         const column = document.createElement('div');
-        column.classList.add('prayer-column', prayer.toLowerCase()); // Menambahkan kelas berdasarkan nama solat
+        column.classList.add('prayer-column');
         if (prayer === closestPrayer) column.classList.add('highlight');
         column.innerHTML = html;
         prayerDiv.appendChild(column);
