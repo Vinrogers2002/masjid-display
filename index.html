@@ -50,16 +50,18 @@
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 10px;
-      font-size: 20px;
+      font-size: 24px;
       margin-bottom: 10px;
       width: 90%;
+      text-align: center;
     }
     .prayer-column {
-      padding: 10px;
+      padding: 15px;
       border-radius: 10px;
       text-align: center;
       font-family: 'Arial', sans-serif;
       color: white;
+      font-size: 22px;
     }
     .subuh { background-color: #5aaf4b; }
     .dhuhr { background-color: #f39c12; }
@@ -71,7 +73,7 @@
       font-weight: bold;
     }
     #countdown-timer, #iqamah-countdown {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
       color: #ffcc00;
       animation: pulse 1.5s infinite;
@@ -88,13 +90,13 @@
       color: #ffff00;
     }
     .masjid-name {
-      font-size: 32px;
+      font-size: 38px;
       font-weight: bold;
       font-family: 'Courier New', Courier, monospace;
       letter-spacing: 2px;
     }
     .imam-info {
-      font-size: 20px;
+      font-size: 22px;
       font-style: italic;
     }
     .running-text {
@@ -104,7 +106,7 @@
       background: #000;
       color: #fff;
       padding: 12px;
-      font-size: 20px;
+      font-size: 22px;
       white-space: nowrap;
       overflow: hidden;
     }
@@ -122,7 +124,7 @@
       justify-content: space-between;
       width: 100%;
       padding: 10px;
-      margin-top: 20px;
+      margin-top: 10px;
     }
     .countdown-column {
       width: 45%;
@@ -130,6 +132,8 @@
       background-color: rgba(0, 0, 0, 0.7);
       padding: 10px;
       border-radius: 8px;
+      font-size: 20px;
+      color: white;
     }
     .prayer-column, .countdown-column {
       font-size: 18px;
@@ -153,11 +157,11 @@
     <div class="prayer-times" id="prayer-times"></div>
     <div class="countdown-section">
       <div class="countdown-column" id="countdown-adzan">
-        <span>Countdown Adzan</span>
+        <span>Adzan</span>
         <span id="countdown-timer">--:--:--</span>
       </div>
       <div class="countdown-column" id="countdown-iqamah">
-        <span>Countdown Iqamah</span>
+        <span>Iqamah</span>
         <span id="iqamah-countdown">--:--:--</span>
       </div>
     </div>
@@ -231,7 +235,7 @@
       if (closestCountdown !== null) {
         const adzanColumn = document.getElementById('countdown-adzan');
         adzanColumn.innerHTML = `
-          <span>Countdown Adzan</span>
+          <span>Adzan</span>
           <span id="countdown-timer">${formatCountdown(closestCountdown)}</span>
         `;
 
@@ -249,7 +253,7 @@
         let iqamahCountdown = Math.floor((iqamahTime - now) / 1000);
         const iqamahColumn = document.getElementById('countdown-iqamah');
         iqamahColumn.innerHTML = `
-          <span>Countdown Iqamah</span>
+          <span>Iqamah</span>
           <span id="iqamah-countdown">${formatCountdown(iqamahCountdown)}</span>
         `;
 
