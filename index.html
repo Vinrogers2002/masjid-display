@@ -241,6 +241,17 @@
       if (closestCountdown !== null) {
         const countdownEl = document.getElementById('countdown-timer');
         countdownEl.textContent = formatCountdown(closestCountdown);
-        countdownInterval =
+        countdownInterval = setInterval(function() {
+          closestCountdown--;
+          countdownEl.textContent = formatCountdown(closestCountdown);
+        }, 1000);
+      }
+    }
 
-          
+    setInterval(updateClock, 1000);
+    setInterval(getPrayerTimes, 60000);
+    updateClock();
+    getPrayerTimes();
+  </script>
+</body>
+</html>
