@@ -20,7 +20,7 @@
       color: #ffff00;
     }
     .overlay {
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.4);
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
@@ -44,6 +44,7 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      gap: 10px;
     }
     .clock-box {
       background: rgba(0,0,0,0.6);
@@ -61,19 +62,25 @@
       margin-top: 8px;
       color: #ffff00;
     }
-    .azan-iqamah {
+    .azan-iqamah-row {
+      display: flex;
+      gap: 10px;
+    }
+    .azan-iqamah-box {
       background-color: #000;
       color: #ffff00;
-      padding: 10px;
+      padding: 10px 20px;
       border-radius: 10px;
-      margin-top: 10px;
-      font-size: 18px;
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-    }
-    .azan-iqamah div {
+      width: 120px;
       text-align: center;
+    }
+    .azan-iqamah-box strong {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .azan-iqamah-box span {
+      font-size: 20px;
     }
     .info-masjid {
       text-align: right;
@@ -90,21 +97,23 @@
     .prayer-times {
       display: flex;
       justify-content: center;
-      gap: 12px;
+      gap: 16px;
       flex-wrap: wrap;
-      margin-bottom: 60px;
+      margin-bottom: 80px;
     }
     .prayer-column {
       background-color: #66cc66;
-      background-image: linear-gradient(to bottom, #66cc66, #99e699);
       padding: 20px;
       border-radius: 12px;
       text-align: center;
       flex: 1;
-      min-width: 130px;
+      min-width: 140px;
       color: white;
       font-weight: bold;
-      font-size: 20px;
+      font-size: 24px;
+    }
+    .prayer-column span {
+      display: block;
     }
     .highlight {
       border: 4px solid yellow;
@@ -147,13 +156,13 @@
           <div class="clock" id="clock">--:--:--</div>
           <div class="date" id="date">Loading date...</div>
         </div>
-        <div class="azan-iqamah">
-          <div>
-            <strong>Adzan</strong><br>
+        <div class="azan-iqamah-row">
+          <div class="azan-iqamah-box">
+            <strong>Adzan</strong>
             <span id="countdown-timer">--:--:--</span>
           </div>
-          <div>
-            <strong>Iqamah</strong><br>
+          <div class="azan-iqamah-box">
+            <strong>Iqamah</strong>
             <span>+10 menit</span>
           </div>
         </div>
@@ -198,7 +207,7 @@
       const hours = Math.floor(seconds / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
       const remainingSeconds = seconds % 60;
-      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+      return `${String(hours).padStart(2, '0')}${String(minutes).padStart(2, '0')}${String(remainingSeconds).padStart(2, '0')}`;
     }
 
     let countdownInterval;
@@ -210,34 +219,39 @@
       const prayerDiv = document.getElementById('prayer-times');
       prayerDiv.innerHTML = '';
 
-      const colors = ['#4CAF50', '#2196F3', '#FF9800', '#FF0000', '#9C27B0'];
-      const timesList = Object.keys(prayerTimes);
+      const colors = {
+        'Subuh': '#4CAF50',
+        'Dzuhur': '#2196F3',
+        'Ashar': '#FFEB3B',
+        'Maghrib': '#FF0000',
+        'Isya': '#800080'
+      };
+
       let closestPrayer = null;
       let closestTime = null;
       let closestCountdown = null;
 
-      timesList.forEach((prayer, i) => {
-        const [hours, minutes] = prayerTimes[prayer].split(':').map(Number);
+      for (const [prayer, time] of Object.entries(prayerTimes)) {
+        const [hours, minutes] = time.split(':').map(Number);
         const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
-
-        if (now < prayerDate && !closestPrayer) {
-          closestPrayer = prayer;
-          closestTime = prayerDate;
-          closestCountdown = Math.floor((prayerDate - now) / 1000);
-        }
 
         const column = document.createElement('div');
         column.classList.add('prayer-column');
-        column.style.background = colors[i % colors.length];
+        column.style.backgroundColor = colors[prayer] || '#666';
 
-        if (prayer === closestPrayer) column.classList.add('highlight');
+        if (!closestPrayer && now < prayerDate) {
+          closestPrayer = prayer;
+          closestTime = prayerDate;
+          closestCountdown = Math.floor((prayerDate - now) / 1000);
+          column.classList.add('highlight');
+        }
 
         column.innerHTML = `
-          <span>${prayer}</span>
-          <span>${prayerTimes[prayer]}</span>
+          <span style="font-size: 26px;">${prayer}</span>
+          <span style="font-size: 28px;">${time}</span>
         `;
         prayerDiv.appendChild(column);
-      });
+      }
 
       if (closestCountdown !== null) {
         const countdownEl = document.getElementById('countdown-timer');
