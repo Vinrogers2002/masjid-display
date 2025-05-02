@@ -35,6 +35,20 @@
     .date {
       font-size: 18px;
     }
+    .adzan-iqamah-container {
+      position: absolute;
+      top: 120px;
+      right: 30px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px 20px;
+      border-radius: 10px;
+      color: #ffff00;
+      text-align: center;
+    }
+    .adzan-iqamah {
+      font-size: 20px;
+      font-weight: bold;
+    }
     .main-content {
       position: absolute;
       top: 100px;
@@ -50,30 +64,31 @@
       display: grid;
       grid-template-columns: repeat(6, 1fr);
       gap: 10px;
-      font-size: 24px;
+      font-size: 20px;
       margin-bottom: 10px;
       width: 90%;
-      text-align: center;
     }
     .prayer-column {
-      padding: 15px;
+      background-color: #66cc66;
+      background-image: linear-gradient(to bottom, #66cc66, #99e699);
+      padding: 10px;
       border-radius: 10px;
       text-align: center;
-      font-family: 'Arial', sans-serif;
-      color: white;
       font-size: 22px;
     }
-    .subuh { background-color: #5aaf4b; }
-    .dhuhr { background-color: #f39c12; }
-    .ashar { background-color: #e74c3c; }
-    .maghrib { background-color: #2980b9; }
-    .isya { background-color: #8e44ad; }
+    .prayer-column span {
+      display: block;
+      margin: 4px 0;
+      color: white;
+    }
     .highlight {
       background-color: #8B0000;
+      background-image: linear-gradient(to bottom, #8B0000, #7F0000);
       font-weight: bold;
+      border-radius: 10px;
     }
-    #countdown-timer, #iqamah-countdown {
-      font-size: 22px;
+    #countdown-timer {
+      font-size: 20px;
       font-weight: bold;
       color: #ffcc00;
       animation: pulse 1.5s infinite;
@@ -90,14 +105,11 @@
       color: #ffff00;
     }
     .masjid-name {
-      font-size: 38px;
+      font-size: 30px;
       font-weight: bold;
-      font-family: 'Courier New', Courier, monospace;
-      letter-spacing: 2px;
     }
-    .imam-info {
-      font-size: 22px;
-      font-style: italic;
+    .imam-name {
+      font-size: 20px;
     }
     .running-text {
       position: absolute;
@@ -106,7 +118,7 @@
       background: #000;
       color: #fff;
       padding: 12px;
-      font-size: 22px;
+      font-size: 20px;
       white-space: nowrap;
       overflow: hidden;
     }
@@ -119,26 +131,6 @@
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
-    .countdown-section {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-    }
-    .countdown-column {
-      width: 45%;
-      text-align: center;
-      background-color: rgba(0, 0, 0, 0.7);
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 20px;
-      color: white;
-    }
-    .prayer-column, .countdown-column {
-      font-size: 18px;
-      color: white;
-    }
   </style>
 </head>
 <body>
@@ -147,24 +139,19 @@
     <div class="date" id="date">Loading date...</div>
   </div>
 
+  <div class="adzan-iqamah-container">
+    <div class="adzan-iqamah" id="adzan">Adzan: --:--</div>
+    <div class="adzan-iqamah" id="iqamah">Iqamah: --:--</div>
+  </div>
+
   <div class="info-panel">
     <div class="masjid-name">Masjid Al Huda Komplek Rajawali Bandara</div>
-    <div class="imam-info">Imam: Ust. Lalu Ami Aziz Saputra S.Ag</div>
-    <div class="imam-info">Bilal: Ust. Junaidi</div>
+    <div class="imam-name">Imam: Ust. Lalu Ami Aziz Saputra S.Ag</div>
+    <div>Bilal: Ust. Junaidi</div>
   </div>
 
   <div class="main-content">
     <div class="prayer-times" id="prayer-times"></div>
-    <div class="countdown-section">
-      <div class="countdown-column" id="countdown-adzan">
-        <span>Adzan</span>
-        <span id="countdown-timer">--:--:--</span>
-      </div>
-      <div class="countdown-column" id="countdown-iqamah">
-        <span>Iqamah</span>
-        <span id="iqamah-countdown">--:--:--</span>
-      </div>
-    </div>
   </div>
 
   <div class="running-text">
@@ -225,42 +212,37 @@
 
         const column = document.createElement('div');
         column.classList.add('prayer-column');
-        column.classList.add(prayer.toLowerCase());
         if (prayer === closestPrayer) column.classList.add('highlight');
         column.innerHTML = `<span>${prayer}</span><span>${prayerTimes[prayer]}</span>`;
         prayerDiv.appendChild(column);
       });
 
-      // Countdown Adzan
+      // Tambahkan kolom adzan dan iqamah countdown
       if (closestCountdown !== null) {
-        const adzanColumn = document.getElementById('countdown-adzan');
+        const adzanColumn = document.createElement('div');
+        adzanColumn.classList.add('prayer-column');
         adzanColumn.innerHTML = `
           <span>Adzan</span>
-          <span id="countdown-timer">${formatCountdown(closestCountdown)}</span>
+          <span id="countdown-adzan">${formatCountdown(closestCountdown)}</span>
         `;
+        document.getElementById('adzan').textContent = `Adzan: ${formatCountdown(closestCountdown)}`;
+
+        const iqamahColumn = document.createElement('div');
+        iqamahColumn.classList.add('prayer-column');
+        iqamahColumn.innerHTML = `
+          <span>Iqamah</span>
+          <span id="countdown-iqamah">--:--:--</span>
+        `;
+        document.getElementById('iqamah').textContent = `Iqamah: --:--`;
+
+        prayerDiv.appendChild(adzanColumn);
+        prayerDiv.appendChild(iqamahColumn);
 
         countdownInterval = setInterval(function() {
           closestCountdown--;
-          const countdownEl = document.getElementById('countdown-timer');
+          const countdownEl = document.getElementById('countdown-adzan');
           if (countdownEl) countdownEl.textContent = formatCountdown(closestCountdown);
           if (closestCountdown <= 0) getPrayerTimes();
-        }, 1000);
-      }
-
-      // Countdown Iqamah
-      const iqamahTime = closestTime ? new Date(closestTime.getTime() + 5 * 60 * 1000) : null;
-      if (iqamahTime) {
-        let iqamahCountdown = Math.floor((iqamahTime - now) / 1000);
-        const iqamahColumn = document.getElementById('countdown-iqamah');
-        iqamahColumn.innerHTML = `
-          <span>Iqamah</span>
-          <span id="iqamah-countdown">${formatCountdown(iqamahCountdown)}</span>
-        `;
-
-        setInterval(function() {
-          iqamahCountdown--;
-          const iqamahEl = document.getElementById('iqamah-countdown');
-          if (iqamahEl) iqamahEl.textContent = formatCountdown(iqamahCountdown);
         }, 1000);
       }
     }
