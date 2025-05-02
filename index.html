@@ -61,22 +61,24 @@
       font-size: 20px;
       text-align: center;
       width: 180px;
+      color: #ffff00;
     }
     .masjid-info {
       text-align: right;
+      color: #ffff00;
     }
     .masjid-info h1 {
-      font-size: 28px;
+      font-size: 30px;
       font-weight: bold;
     }
     .masjid-info h3 {
-      font-size: 18px;
+      font-size: 22px;
       margin: 5px 0;
     }
     .prayer-times {
       display: flex;
       justify-content: center;
-      gap: 10px;
+      gap: 15px;
       flex-wrap: wrap;
       margin-bottom: 20px;
     }
@@ -84,14 +86,15 @@
       flex: 1;
       min-width: 120px;
       text-align: center;
-      padding: 15px;
-      border-radius: 10px;
+      padding: 20px 10px;
+      border-radius: 12px;
       color: white;
-      font-size: 18px;
+      font-size: 20px;
     }
     .prayer-box .label {
       font-weight: bold;
-      font-size: 20px;
+      font-size: 24px;
+      margin-bottom: 5px;
     }
     .highlight {
       border: 3px solid #fff;
@@ -131,10 +134,10 @@
           <div class="date" id="date">Memuat tanggal...</div>
         </div>
         <div class="countdown-box">
-          <div>Adzan: <span id="adzan-countdown">--:--:--</span></div>
+          <div>Adzan: <span id="adzan-countdown">--:--</span></div>
         </div>
         <div class="countdown-box">
-          <div>Iqamah: <span id="iqamah-countdown">--:--:--</span></div>
+          <div>Iqamah: <span id="iqamah-countdown">--:--</span></div>
         </div>
       </div>
       <div class="masjid-info">
@@ -161,7 +164,7 @@
       Isya: '19:17'
     };
 
-    const prayerColors = ['#1abc9c', '#3498db', '#9b59b6', '#e67e22', '#f1c40f'];
+    const prayerColors = ['#2ecc71', '#3498db', '#e74c3c', '#f39c12', '#9b59b6'];
 
     function updateClock() {
       const now = new Date();
