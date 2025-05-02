@@ -35,6 +35,57 @@
     .date {
       font-size: 18px;
     }
+    .main-content {
+      position: absolute;
+      top: 100px;
+      left: 0;
+      right: 0;
+      bottom: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .prayer-times {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 15px;
+      font-size: 22px;
+      margin-bottom: 10px;
+      width: 90%;
+    }
+    .prayer-column {
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      background-color: #66cc66;
+      color: white;
+      box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+    }
+    .highlight {
+      background-color: #8B0000;
+      background-image: linear-gradient(to bottom, #8B0000, #7F0000);
+      font-weight: bold;
+      border-radius: 10px;
+    }
+    .prayer-column span.time {
+      display: block;
+      margin-top: 8px;
+      font-size: 18px;
+      color: white;
+    }
+    #countdown-timer, #iqamah-timer {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffcc00;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
     .info-panel {
       position: absolute;
       top: 20px;
@@ -44,6 +95,10 @@
     .masjid-name {
       font-size: 28px;
       font-weight: bold;
+    }
+    .video-placeholder {
+      margin-top: 10px;
+      font-size: 18px;
     }
     .running-text {
       position: absolute;
@@ -65,61 +120,6 @@
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
-    .main-content {
-      position: absolute;
-      top: 80px;
-      left: 0;
-      right: 0;
-      bottom: 50px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-    }
-    .prayer-times {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      font-size: 20px;
-      width: 90%;
-    }
-    .prayer-column {
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-      background-color: rgba(0, 0, 0, 0.5);
-      color: white;
-    }
-    .highlight {
-      background-color: #8B0000;
-      font-weight: bold;
-    }
-    #countdown-timer, #iqamah-timer {
-      font-size: 20px;
-      font-weight: bold;
-      color: #ffcc00;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
-    .countdown-container {
-      position: absolute;
-      top: 120px;
-      right: 30px;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 10px;
-      border-radius: 10px;
-      color: #ffff00;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-    }
-    .countdown-label {
-      font-size: 16px;
-    }
   </style>
 </head>
 <body>
@@ -140,13 +140,6 @@
 
   <div class="running-text">
     <span>Pengumuman: Kajian Rutin Minggu Ba'da Subuh | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Quran dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari keji dan mungkar. (Al Ankabut: 45)</span>
-  </div>
-
-  <div class="countdown-container" id="countdown-container">
-    <div id="adzan-label" class="countdown-label">Adzan</div>
-    <div id="countdown-timer">--:--:--</div>
-    <div id="iqamah-label" class="countdown-label">Iqamah</div>
-    <div id="iqamah-timer">--:--:--</div>
   </div>
 
   <script>
@@ -203,21 +196,48 @@
 
         const column = document.createElement('div');
         column.classList.add('prayer-column');
-        column.classList.add('prayer-column-' + prayer.toLowerCase());
         if (prayer === closestPrayer) column.classList.add('highlight');
-        column.innerHTML = `<span>${prayer}</span><span>${prayerTimes[prayer]}</span>`;
+        column.style.backgroundColor = getPrayerColor(prayer);
+        column.innerHTML = `<span>${prayer}</span><span class="time">${prayerTimes[prayer]}</span>`;
         prayerDiv.appendChild(column);
       });
 
-      // Update countdowns
+      // Tambahkan kolom adzan countdown
       if (closestCountdown !== null) {
-        document.getElementById('countdown-timer').textContent = formatCountdown(closestCountdown);
+        const adzanColumn = document.createElement('div');
+        adzanColumn.classList.add('prayer-column');
+        adzanColumn.innerHTML = `
+          <span>Adzan</span>
+          <span id="countdown-timer">${formatCountdown(closestCountdown)}</span>
+        `;
+        prayerDiv.appendChild(adzanColumn);
+
         countdownInterval = setInterval(function() {
           closestCountdown--;
           const countdownEl = document.getElementById('countdown-timer');
           if (countdownEl) countdownEl.textContent = formatCountdown(closestCountdown);
           if (closestCountdown <= 0) getPrayerTimes();
         }, 1000);
+      }
+
+      // Tambahkan kolom iqamah countdown
+      const iqamahColumn = document.createElement('div');
+      iqamahColumn.classList.add('prayer-column');
+      iqamahColumn.innerHTML = `
+        <span>Iqamah</span>
+        <span id="iqamah-timer">00:00:00</span>
+      `;
+      prayerDiv.appendChild(iqamahColumn);
+    }
+
+    function getPrayerColor(prayer) {
+      switch (prayer) {
+        case 'Subuh': return '#ffcc00';
+        case 'Dhuhr': return '#00b300';
+        case 'Ashar': return '#ff6600';
+        case 'Maghrib': return '#0066cc';
+        case 'Isya': return '#6600cc';
+        default: return '#66cc66';
       }
     }
 
