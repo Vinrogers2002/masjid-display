@@ -75,12 +75,14 @@
       font-size: 22px;
       margin: 5px 0;
     }
+
     .prayer-times {
       display: flex;
       justify-content: center;
       gap: 15px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-top: auto;
+      margin-bottom: 80px; /* naikkan sedikit dari bawah */
     }
     .prayer-box {
       flex: 1;
@@ -90,6 +92,7 @@
       border-radius: 12px;
       color: white;
       font-size: 20px;
+      background-color: rgba(0, 0, 0, 0.4); /* transparansi tambahan */
     }
     .prayer-box .label {
       font-weight: bold;
@@ -97,9 +100,14 @@
       margin-bottom: 5px;
     }
     .highlight {
-      border: 3px solid #fff;
-      box-shadow: 0 0 10px #fff;
+      border: 3px solid #ffff00;
+      box-shadow: 0 0 15px #ffff00;
+      animation: blink 1s step-start 0s infinite;
     }
+    @keyframes blink {
+      50% { opacity: 0.2; }
+    }
+
     .running-text {
       position: fixed;
       bottom: 0;
@@ -107,8 +115,8 @@
       width: 100%;
       background: black;
       color: white;
-      padding: 12px;
-      font-size: 20px;
+      padding: 15px;
+      font-size: 28px; /* diperbesar */
       white-space: nowrap;
       overflow: hidden;
       z-index: 2;
@@ -192,7 +200,7 @@
         const prayerTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
         const box = document.createElement('div');
         box.classList.add('prayer-box');
-        box.style.backgroundColor = prayerColors[idx % prayerColors.length];
+        box.style.backgroundColor = `${prayerColors[idx % prayerColors.length]}bb`; // transparan pakai hex alpha
         box.innerHTML = `<div class="label">${name}</div><div>${time}</div>`;
 
         if (!nextPrayer && now < prayerTime) {
