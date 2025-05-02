@@ -117,6 +117,24 @@
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
+    .countdown-section {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+    }
+    .countdown-column {
+      width: 45%;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .prayer-column, .countdown-column {
+      font-size: 18px;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -133,12 +151,12 @@
 
   <div class="main-content">
     <div class="prayer-times" id="prayer-times"></div>
-    <div class="prayer-times">
-      <div class="prayer-column" id="countdown-adzan">
+    <div class="countdown-section">
+      <div class="countdown-column" id="countdown-adzan">
         <span>Countdown Adzan</span>
         <span id="countdown-timer">--:--:--</span>
       </div>
-      <div class="prayer-column" id="countdown-iqamah">
+      <div class="countdown-column" id="countdown-iqamah">
         <span>Countdown Iqamah</span>
         <span id="iqamah-countdown">--:--:--</span>
       </div>
