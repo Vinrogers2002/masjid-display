@@ -55,6 +55,12 @@
       gap: 20px;
       margin-top: 10px;
     }
+    .clock-wrapper {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 10px;
+    }
     .countdown-column {
       background-color: #333;
       color: #ffff00;
@@ -194,6 +200,7 @@
   <div class="overlay"></div>
   <div class="container">
     <div class="header">
+      <div class="clock-wrapper">
       <div class="clock-box">
         <div class="clock" id="clock">--:--:--</div>
         <div class="date" id="date">Loading date...</div>
