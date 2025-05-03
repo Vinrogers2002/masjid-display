@@ -48,6 +48,25 @@
       border-radius: 12px;
       text-align: center;
     }
+    .countdown-wrapper {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 10px;
+    } 
+    .countdown-column {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 15px;
+      border-radius: 12px;
+      color: yellow;
+      font-weight: bold;
+      font-size: 16px;
+      min-width: 120px;
+    }
+    .countdown-column div:last-child {
+      font-size: 20px;
+      margin-top: 4px;
+    }
     .clock {
       font-size: 64px;
       font-weight: bold;
@@ -172,6 +191,19 @@
       <div class="clock-box">
         <div class="clock" id="clock">--:--:--</div>
         <div class="date" id="date">Loading date...</div>
+
+         <!-- Tambahkan kolom adzan + iqamah DI BAWAH jam -->
+        <div class="countdown-wrapper">
+          <div class="countdown-column">
+            <div>Adzan</div>
+            <div id="countdown-adzan">--:--:--</div>
+          </div>
+          <div class="countdown-column">
+            <div>Iqamah</div>
+            <div id="countdown-iqamah">--:--:--</div>
+          </div>
+        </div>
+      </div>
       </div>
       <div class="info-masjid">
         <div class="masjid-name">Masjid Al Huda Komplek Rajawali Bandara</div>
@@ -188,6 +220,51 @@
   </div>
 
   <script>
+   function formatCountdown(s) {
+  const h = String(Math.floor(s / 3600)).padStart(2, '0');
+  const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+  const sec = String(s % 60).padStart(2, '0');
+  return `${h}:${m}:${sec}`;
+}
+
+function startCountdowns(closestTime, prayerName) {
+  const iqamahOffset = (prayerName === 'Subuh' ? 15 : 10) * 60 * 1000;
+  const iqamahTime = new Date(closestTime.getTime() + iqamahOffset);
+
+  clearInterval(window._cdTimer);
+  window._cdTimer = setInterval(() => {
+    const now = new Date();
+
+    let secAdzan = Math.floor((closestTime - now) / 1000);
+    let secIqamah = Math.floor((iqamahTime - now) / 1000);
+
+    document.getElementById('countdown-adzan').textContent = formatCountdown(Math.max(0, secAdzan));
+    document.getElementById('countdown-iqamah').textContent = formatCountdown(Math.max(0, secIqamah));
+  }, 1000);
+}
+    function formatCountdown(s) {
+  const h = String(Math.floor(s / 3600)).padStart(2, '0');
+  const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+  const sec = String(s % 60).padStart(2, '0');
+  return `${h}:${m}:${sec}`;
+}
+
+function startCountdowns(closestTime, prayerName) {
+  const iqamahOffset = (prayerName === 'Subuh' ? 15 : 10) * 60 * 1000;
+  const iqamahTime = new Date(closestTime.getTime() + iqamahOffset);
+
+  clearInterval(window._cdTimer);
+  window._cdTimer = setInterval(() => {
+    const now = new Date();
+
+    let secAdzan = Math.floor((closestTime - now) / 1000);
+    let secIqamah = Math.floor((iqamahTime - now) / 1000);
+
+    document.getElementById('countdown-adzan').textContent = formatCountdown(Math.max(0, secAdzan));
+    document.getElementById('countdown-iqamah').textContent = formatCountdown(Math.max(0, secIqamah));
+  }, 1000);
+}
+
     const prayerTimes = {
       'Subuh': '04:37',
       'Dhuhr': '12:07',
