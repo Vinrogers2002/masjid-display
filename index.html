@@ -273,6 +273,28 @@ function startCountdowns(closestTime, prayerName) {
       'Isya': '19:17'
     };
 
+     // Cari waktu salat berikutnya
+    const now = new Date();
+    let closestTime = null;
+    let closestPrayer = "";
+
+    for (const prayer in prayerTimes) {
+    const timeParts = prayerTimes[prayer].split(':');
+    const prayerDate = new Date();
+    prayerDate.setHours(parseInt(timeParts[0]));
+    prayerDate.setMinutes(parseInt(timeParts[1]));
+    prayerDate.setSeconds(0);
+
+    if (prayerDate > now) {
+      closestTime = prayerDate;
+      closestPrayer = prayer;
+      break;
+  }
+}
+
+// Panggil fungsi countdown setelah dapat waktu salat berikutnya
+startCountdowns(closestTime, closestPrayer);   
+
     function updateClock() {
       const now = new Date();
       const jam = now.getHours().toString().padStart(2, '0');
