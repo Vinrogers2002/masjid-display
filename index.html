@@ -34,7 +34,7 @@
       display: flex;
       flex-direction: column;
       height: 100%;
-      padding: 20px 40px 90px 40px; /* beri ruang bawah untuk running text */
+      padding: 20px 40px 90px 40px;
       justify-content: space-between;
     }
     .header {
@@ -57,6 +57,22 @@
       font-size: 20px;
       margin-top: 8px;
       color: #ffff00;
+    }
+    .countdown-boxes {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      justify-content: center;
+    }
+    .countdown-box {
+      background: rgba(0,0,0,0.6);
+      padding: 12px 20px;
+      border-radius: 12px;
+      text-align: center;
+      color: #ffff00;
+      font-size: 22px;
+      font-weight: bold;
+      min-width: 150px;
     }
     .info-masjid {
       text-align: right;
@@ -92,41 +108,14 @@
       font-weight: bold;
       color: white;
     }
-    /* Mengubah warna kolom solat menjadi lebih solid dan tegas */
-    .subuh {
-      background-color: #008000; /* Hijau solid */
-    }
-    .dhuhr {
-      background-color: #ff6600; /* Oranye solid */
-    }
-    .ashar {
-      background-color: #0066cc; /* Biru solid */
-    }
-    .maghrib {
-      background-color: #cc0000; /* Merah solid */
-    }
-    .isya {
-      background-color: #660066; /* Ungu gelap solid */
-    }
+    .subuh { background-color: #008000; }
+    .dhuhr { background-color: #ff6600; }
+    .ashar { background-color: #0066cc; }
+    .maghrib { background-color: #cc0000; }
+    .isya { background-color: #660066; }
     .highlight {
       background-color: #8B0000;
       background-image: linear-gradient(to bottom, #8B0000, #7F0000);
-    }
-    .azan-column {
-      background-color: #8B0000;
-      color: white;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      min-width: 120px;
-      flex: 1;
-      font-size: 24px;
-      font-weight: bold;
-    }
-    #countdown-timer {
-      color: #ffcc00;
-      font-size: 20px;
-      font-weight: bold;
     }
     .running-text {
       position: fixed;
@@ -150,19 +139,6 @@
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
-
-    /* Tanda untuk solat yang akan datang */
-    .next-prayer {
-      border: 3px solid #ffcc00;
-      background-color: rgba(255, 204, 0, 0.6);
-      animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
-      50% { box-shadow: 0 0 25px rgba(255, 204, 0, 1); }
-      100% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
-    }
   </style>
 </head>
 <body>
@@ -172,6 +148,16 @@
       <div class="clock-box">
         <div class="clock" id="clock">--:--:--</div>
         <div class="date" id="date">Loading date...</div>
+        <div class="countdown-boxes">
+          <div class="countdown-box">
+            <div>Adzan</div>
+            <div id="countdown-adzan">--:--:--</div>
+          </div>
+          <div class="countdown-box">
+            <div>Iqamah</div>
+            <div id="countdown-iqamah">--:--:--</div>
+          </div>
+        </div>
       </div>
       <div class="info-masjid">
         <div class="masjid-name">Masjid Al Huda Komplek Rajawali Bandara</div>
@@ -179,12 +165,11 @@
         <h4>Bilal: Ust. Junaidi</h4>
       </div>
     </div>
-
     <div class="prayer-times" id="prayer-times"></div>
   </div>
 
   <div class="running-text">
-    <span>Pengumuman : Pelatihan Tilawatil quran setiap hari sabtu ba'da isya, bersama Ust. Muhammad Yunus (Qori' Senior Kota Batam) | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari (perbuatan-perbuatan) keji dan mungkar. Dan sesungguhnya mengingat Allah (shalat) adalah lebih besar (keutamaannya dari ibadat-ibadat yang lain). Dan Allah mengetahui apa yang kamu kerjakan. (Al Ankabut: 45)</span>
+    <span>Pengumuman : Pelatihan Tilawatil quran setiap hari sabtu ba'da isya, bersama Ust. Muhammad Yunus (Qori' Senior Kota Batam) | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu...</span>
   </div>
 
   <script>
@@ -212,52 +197,58 @@
     function formatCountdown(seconds) {
       const hours = Math.floor(seconds / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
-      const remainingSeconds = seconds % 60;
-      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+      const secondsLeft = seconds % 60;
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
     }
 
-    let countdownInterval;
-
-    function getPrayerTimes() {
-      clearInterval(countdownInterval);
-
+    function getNextPrayerAndCountdown() {
       const now = new Date();
+      let closestTime = null;
+      let closestPrayer = '';
+      for (const prayer in prayerTimes) {
+        const [h, m] = prayerTimes[prayer].split(':').map(Number);
+        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0);
+        if (prayerDate > now) {
+          closestTime = prayerDate;
+          closestPrayer = prayer;
+          break;
+        }
+      }
+      if (!closestTime) return;
+
+      const adzanSeconds = Math.floor((closestTime - now) / 1000);
+      const iqamahSeconds = adzanSeconds + (closestPrayer === 'Subuh' ? 15 : 10) * 60;
+
+      document.getElementById('countdown-adzan').textContent = formatCountdown(adzanSeconds);
+      document.getElementById('countdown-iqamah').textContent = formatCountdown(iqamahSeconds);
+    }
+
+    function displayPrayerTimes() {
       const prayerDiv = document.getElementById('prayer-times');
       prayerDiv.innerHTML = '';
+      const now = new Date();
 
-      const timesList = ['Subuh', 'Dhuhr', 'Ashar', 'Maghrib', 'Isya'];
-      let closestPrayer = null;
-      let closestTime = null;
-      let closestCountdown = null;
+      for (const prayer in prayerTimes) {
+        const [h, m] = prayerTimes[prayer].split(':').map(Number);
+        const time = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
+        const isNext = time > now && !document.querySelector('.next-prayer');
 
-      timesList.forEach(prayer => {
-        const [hours, minutes] = prayerTimes[prayer].split(':').map(Number);
-        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
-
-        if (now < prayerDate && !closestPrayer) {
-          closestPrayer = prayer;
-          closestTime = prayerDate;
-          closestCountdown = Math.floor((prayerDate - now) / 1000);
-        }
-
-        const prayerClass = prayer.toLowerCase();
-        const isNextPrayer = prayer === closestPrayer ? 'next-prayer' : '';
-
-        const html = `<div class="prayer-column ${prayerClass} ${isNextPrayer}">
+        const className = prayer.toLowerCase();
+        const html = `<div class="prayer-column ${className} ${isNext ? 'next-prayer' : ''}">
                         <div>${prayer}</div>
                         <div>${prayerTimes[prayer]}</div>
                       </div>`;
         prayerDiv.innerHTML += html;
-      });
-
-      document.getElementById('countdown-timer').textContent = `Sisa Waktu: ${formatCountdown(closestCountdown)}`;
+      }
     }
 
-    setInterval(updateClock, 1000);
-    setInterval(getPrayerTimes, 60000);
-
     updateClock();
-    getPrayerTimes();
+    displayPrayerTimes();
+    getNextPrayerAndCountdown();
+
+    setInterval(updateClock, 1000);
+    setInterval(displayPrayerTimes, 60000);
+    setInterval(getNextPrayerAndCountdown, 1000);
   </script>
 </body>
 </html>
