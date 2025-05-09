@@ -239,10 +239,12 @@
       closestTime = prayerDate;
       closestPrayer = prayer;
     }
+  }
 
-    const isNext = prayer === closestPrayer;
+  for (const prayer in prayerTimes) {
     const className = prayer.toLowerCase();
-    const html = `<div class="prayer-column ${className} ${isNext ? 'next-prayer' : ''}">
+    const isNext = prayer === closestPrayer ? 'next-prayer' : '';
+    const html = `<div class="prayer-column ${className} ${isNext}">
                     <div>${prayer}</div>
                     <div>${prayerTimes[prayer]}</div>
                   </div>`;
