@@ -224,23 +224,31 @@
     }
 
     function displayPrayerTimes() {
-      const prayerDiv = document.getElementById('prayer-times');
-      prayerDiv.innerHTML = '';
-      const now = new Date();
+  const prayerDiv = document.getElementById('prayer-times');
+  prayerDiv.innerHTML = '';
+  const now = new Date();
 
-      for (const prayer in prayerTimes) {
-        const [h, m] = prayerTimes[prayer].split(':').map(Number);
-        const time = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
-        const isNext = time > now && !document.querySelector('.next-prayer');
+  let closestTime = null;
+  let closestPrayer = null;
 
-        const className = prayer.toLowerCase();
-        const html = `<div class="prayer-column ${className} ${isNext ? 'next-prayer' : ''}">
-                        <div>${prayer}</div>
-                        <div>${prayerTimes[prayer]}</div>
-                      </div>`;
-        prayerDiv.innerHTML += html;
-      }
+  for (const prayer in prayerTimes) {
+    const [h, m] = prayerTimes[prayer].split(':').map(Number);
+    const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
+
+    if (!closestTime && prayerDate > now) {
+      closestTime = prayerDate;
+      closestPrayer = prayer;
     }
+
+    const isNext = prayer === closestPrayer;
+    const className = prayer.toLowerCase();
+    const html = `<div class="prayer-column ${className} ${isNext ? 'next-prayer' : ''}">
+                    <div>${prayer}</div>
+                    <div>${prayerTimes[prayer]}</div>
+                  </div>`;
+    prayerDiv.innerHTML += html;
+  }
+}
 
     updateClock();
     displayPrayerTimes();
