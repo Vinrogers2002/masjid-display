@@ -135,9 +135,14 @@
       padding-left: 100%;
       animation: scroll 55s linear infinite;
     }
+    .next-prayer {
+      border: 3px solid #ffcc00;
+      background-color: rgba(255, 204, 0, 0.6);
+      animation: pulse 1s infinite;
     @keyframes scroll {
-      0% { transform: translateX(0%); }
-      100% { transform: translateX(-100%); }
+      0% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
+      50% { box-shadow: 0 0 25px rgba(255, 204, 0, 1); }
+      100% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
     }
   </style>
 </head>
@@ -231,15 +236,29 @@
   let closestTime = null;
   let closestPrayer = null;
 
+  // Step 1: Temukan waktu solat berikutnya
   for (const prayer in prayerTimes) {
     const [h, m] = prayerTimes[prayer].split(':').map(Number);
     const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
-
     if (!closestTime && prayerDate > now) {
       closestTime = prayerDate;
       closestPrayer = prayer;
+      break;
     }
   }
+
+  // Step 2: Render semua kolom
+  for (const prayer in prayerTimes) {
+    const className = prayer.toLowerCase();
+    const isNext = prayer === closestPrayer ? 'next-prayer' : '';
+    const html = `<div class="prayer-column ${className} ${isNext}">
+                    <div>${prayer}</div>
+                    <div>${prayerTimes[prayer]}</div>
+                  </div>`;
+    prayerDiv.innerHTML += html;
+  }
+}
+
 
   for (const prayer in prayerTimes) {
     const className = prayer.toLowerCase();
