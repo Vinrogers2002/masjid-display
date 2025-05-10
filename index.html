@@ -131,6 +131,22 @@
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
+
+    /* CSS untuk Adzan dan Iqamah */
+    .adzan, .iqamah {
+      background-color: #ffff00; /* Bisa disesuaikan dengan warna lain */
+      color: #000;
+    }
+
+    .adzan-time, .iqamah-time {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .adzan-countdown, .iqamah-countdown {
+      font-size: 20px;
+      color: red;
+    }
   </style>
 </head>
 <body>
@@ -147,7 +163,40 @@
         <h4>Bilal: Ust. Junaidi</h4>
       </div>
     </div>
-    <div class="prayer-times" id="prayer-times"></div>
+    <div class="prayer-times" id="prayer-times">
+      <!-- Kolom Sholat -->
+      <div class="prayer-column subuh">
+        <div>Subuh</div>
+        <div>04:37</div>
+      </div>
+      <div class="prayer-column dhuhr">
+        <div>Dhuhr</div>
+        <div>12:07</div>
+      </div>
+      <div class="prayer-column ashar">
+        <div>Ashar</div>
+        <div>15:21</div>
+      </div>
+      <div class="prayer-column maghrib">
+        <div>Maghrib</div>
+        <div>18:06</div>
+      </div>
+      <div class="prayer-column isya">
+        <div>Isya</div>
+        <div>19:17</div>
+      </div>
+      <!-- Kolom Adzan dan Iqamah -->
+      <div class="prayer-column adzan">
+        <div>Adzan</div>
+        <div id="adzan-time">--:--</div>
+        <div id="adzan-countdown">--:--</div>
+      </div>
+      <div class="prayer-column iqamah">
+        <div>Iqamah</div>
+        <div id="iqamah-time">--:--</div>
+        <div id="iqamah-countdown">--:--</div>
+      </div>
+    </div>
   </div>
 
   <div class="running-text">
@@ -155,58 +204,55 @@
   </div>
 
   <script>
-    const prayerTimes = {
-      'Subuh': '04:37',
-      'Dhuhr': '12:07',
-      'Ashar': '15:21',
-      'Maghrib': '18:06',
-      'Isya': '19:17'
+    // Menambahkan waktu adzan dan iqamah
+    const adzanTimes = {
+      'Subuh': '04:30',
+      'Dhuhr': '12:00',
+      'Ashar': '15:10',
+      'Maghrib': '18:00',
+      'Isya': '19:10'
     };
 
-    function updateClock() {
-      const now = new Date();
-      const jam = now.getHours().toString().padStart(2, '0');
-      const menit = now.getMinutes().toString().padStart(2, '0');
-      const detik = now.getSeconds().toString().padStart(2, '0');
-      document.getElementById('clock').textContent = `${jam}:${menit}:${detik}`;
+    const iqamahTimes = {
+      'Subuh': '04:45',
+      'Dhuhr': '12:15',
+      'Ashar': '15:35',
+      'Maghrib': '18:15',
+      'Isya': '19:20'
+    };
 
-      const hari = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-      const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-      const tgl = `${hari[now.getDay()]}, ${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
-      document.getElementById('date').textContent = tgl;
+    // Fungsi untuk menghitung waktu mundur (countdown)
+    function countdownTo(timeString) {
+      const [hours, minutes] = timeString.split(':').map(Number);
+      const now = new Date();
+      const targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+      const diff = targetTime - now; // Menghitung selisih waktu
+      const minutesLeft = Math.floor(diff / (1000 * 60));
+      const secondsLeft = Math.floor((diff % (1000 * 60)) / 1000);
+      return `${minutesLeft}:${secondsLeft < 10 ? '0' + secondsLeft : secondsLeft}`;
     }
 
-    function displayPrayerTimes() {
-      const prayerDiv = document.getElementById('prayer-times');
-      prayerDiv.innerHTML = '';
+    function displayAdzanIqamah() {
       const now = new Date();
+      const prayerDiv = document.getElementById('prayer-times');
 
-      let closestTime = null;
-      let closestPrayer = null;
+      for (const prayer in adzanTimes) {
+        const adzanTime = adzanTimes[prayer];
+        const iqamahTime = iqamahTimes[prayer];
 
-      for (const prayer in prayerTimes) {
-        const [h, m] = prayerTimes[prayer].split(':').map(Number);
-        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
+        const adzanCountdown = countdownTo(adzanTime);
+        const iqamahCountdown = countdownTo(iqamahTime);
 
-        if (!closestTime && prayerDate > now) {
-          closestTime = prayerDate;
-          closestPrayer = prayer;
-        }
-
-        const isNext = prayer === closestPrayer;
-        const className = prayer.toLowerCase();
-        const html = `<div class="prayer-column ${className} ${isNext ? 'next-prayer' : ''}">
-                        <div>${prayer}</div>
-                        <div>${prayerTimes[prayer]}</div>
-                      </div>`;
-        prayerDiv.innerHTML += html;
+        // Update kolom Adzan dan Iqamah
+        document.getElementById('adzan-time').textContent = adzanTime;
+        document.getElementById('adzan-countdown').textContent = adzanCountdown;
+        document.getElementById('iqamah-time').textContent = iqamahTime;
+        document.getElementById('iqamah-countdown').textContent = iqamahCountdown;
       }
     }
 
-    updateClock();
-    displayPrayerTimes();
-    setInterval(updateClock, 1000);
-    setInterval(displayPrayerTimes, 60000);
+    // Memperbarui countdown setiap detik
+    setInterval(displayAdzanIqamah, 1000);
   </script>
 </body>
 </html>
