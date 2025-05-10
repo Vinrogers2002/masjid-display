@@ -5,15 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Jadwal Sholat Masjid</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+      width: 100%; height: 100%; overflow: hidden;
       font-family: 'Montserrat', sans-serif;
       background: url('https://c0.wallpaperflare.com/path/828/532/1011/masjid-nabawi-i-ve-to-medina-medina-minaret-0e9e43cec7c84c66c2c64bbe00637ed7.jpg') no-repeat center center fixed;
       background-size: cover;
@@ -21,137 +15,68 @@
     }
     .overlay {
       background: rgba(0, 0, 0, 0.3);
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; z-index: 0;
     }
     .container {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      padding: 20px 40px 90px 40px; /* beri ruang bawah untuk running text */
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column;
+      height: 100%; padding: 20px 40px 90px 40px;
       justify-content: space-between;
     }
     .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+      display: flex; justify-content: space-between;
+      align-items: flex-start; flex-wrap: wrap;
     }
     .clock-box {
       background: rgba(0,0,0,0.6);
-      padding: 10px 20px;
-      border-radius: 12px;
+      padding: 10px 20px; border-radius: 12px;
       text-align: center;
     }
     .clock {
-      font-size: 64px;
-      font-weight: bold;
+      font-size: 64px; font-weight: bold;
       color: #ffff00;
     }
     .date {
-      font-size: 20px;
-      margin-top: 8px;
+      font-size: 20px; margin-top: 8px;
       color: #ffff00;
+    }
+    #countdown-adzan, #countdown-iqamah {
+      margin-top: 10px;
+      font-size: 20px;
+      color: #ffcc00;
+      font-weight: bold;
+    }
+    #countdown-iqamah {
+      font-size: 18px;
     }
     .info-masjid {
       text-align: right;
     }
     .masjid-name {
-      font-size: 40px;
-      font-weight: 800;
-      color: #ffff00;
-      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+      font-size: 40px; font-weight: 800;
+      color: #ffff00; text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
       letter-spacing: 1px;
-      text-align: right;
     }
     .info-masjid h3, .info-masjid h4 {
-      font-size: 30px;
-      font-weight: bold;
-      color: #ffff00;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      font-size: 30px; font-weight: bold;
+      color: #ffff00; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     }
     .prayer-times {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 20px;
+      display: flex; justify-content: center;
+      gap: 10px; flex-wrap: wrap; margin-top: 20px;
     }
     .prayer-column {
-      padding: 37px;
-      border-radius: 12px;
-      text-align: center;
-      min-width: 120px;
-      flex: 1;
-      font-size: 39px;
-      font-weight: bold;
-      color: white;
+      padding: 37px; border-radius: 12px;
+      text-align: center; min-width: 120px; flex: 1;
+      font-size: 39px; font-weight: bold; color: white;
     }
-    /* Mengubah warna kolom solat menjadi lebih solid dan tegas */
-    .subuh {
-      background-color: #008000; /* Hijau solid */
-    }
-    .dhuhr {
-      background-color: #ff6600; /* Oranye solid */
-    }
-    .ashar {
-      background-color: #0066cc; /* Biru solid */
-    }
-    .maghrib {
-      background-color: #cc0000; /* Merah solid */
-    }
-    .isya {
-      background-color: #660066; /* Ungu gelap solid */
-    }
-    .highlight {
-      background-color: #8B0000;
-      background-image: linear-gradient(to bottom, #8B0000, #7F0000);
-    }
-    .azan-column {
-      background-color: #8B0000;
-      color: white;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      min-width: 120px;
-      flex: 1;
-      font-size: 24px;
-      font-weight: bold;
-    }
-    #countdown-timer {
-      color: #ffcc00;
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .running-text {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #000;
-      color: #fff;
-      padding: 12px 0;
-      font-size: 38px;
-      white-space: nowrap;
-      overflow: hidden;
-      z-index: 2;
-    }
-    .running-text span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: scroll 55s linear infinite;
-    }
-    @keyframes scroll {
-      0% { transform: translateX(0%); }
-      100% { transform: translateX(-100%); }
-    }
+    .subuh { background-color: #008000; }
+    .dhuhr { background-color: #ff6600; }
+    .ashar { background-color: #0066cc; }
+    .maghrib { background-color: #cc0000; }
+    .isya { background-color: #660066; }
 
-    /* Tanda untuk solat yang akan datang */
     .next-prayer {
       border: 3px solid #ffcc00;
       background-color: rgba(255, 204, 0, 0.6);
@@ -163,6 +88,22 @@
       50% { box-shadow: 0 0 25px rgba(255, 204, 0, 1); }
       100% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.6); }
     }
+
+    .running-text {
+      position: fixed; bottom: 0; left: 0;
+      width: 100%; background: #000;
+      color: #fff; padding: 12px 0;
+      font-size: 38px; white-space: nowrap;
+      overflow: hidden; z-index: 2;
+    }
+    .running-text span {
+      display: inline-block; padding-left: 100%;
+      animation: scroll 55s linear infinite;
+    }
+    @keyframes scroll {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
   </style>
 </head>
 <body>
@@ -172,6 +113,8 @@
       <div class="clock-box">
         <div class="clock" id="clock">--:--:--</div>
         <div class="date" id="date">Loading date...</div>
+        <div id="countdown-adzan">Sisa Waktu Adzan: --:--:--</div>
+        <div id="countdown-iqamah">Sisa Waktu Iqamah: --:--:--</div>
       </div>
       <div class="info-masjid">
         <div class="masjid-name">Masjid Al Huda Komplek Rajawali Bandara</div>
@@ -184,7 +127,7 @@
   </div>
 
   <div class="running-text">
-    <span>Pengumuman : Pelatihan Tilawatil quran setiap hari sabtu ba'da isya, bersama Ust. Muhammad Yunus (Qori' Senior Kota Batam) | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu, yaitu Al Kitab (Al Quran) dan dirikanlah shalat. Sesungguhnya shalat itu mencegah dari (perbuatan-perbuatan) keji dan mungkar. Dan sesungguhnya mengingat Allah (shalat) adalah lebih besar (keutamaannya dari ibadat-ibadat yang lain). Dan Allah mengetahui apa yang kamu kerjakan. (Al Ankabut: 45)</span>
+    <span>Pengumuman : Pelatihan Tilawatil quran setiap hari sabtu ba'da isya, bersama Ust. Muhammad Yunus (Qori' Senior Kota Batam) | Tetap jaga kebersihan masjid | Bacalah apa yang telah diwahyukan kepadamu... (Al Ankabut: 45)</span>
   </div>
 
   <script>
@@ -216,11 +159,7 @@
       return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
     }
 
-    let countdownInterval;
-
     function getPrayerTimes() {
-      clearInterval(countdownInterval);
-
       const now = new Date();
       const prayerDiv = document.getElementById('prayer-times');
       prayerDiv.innerHTML = '';
@@ -242,19 +181,27 @@
 
         const prayerClass = prayer.toLowerCase();
         const isNextPrayer = prayer === closestPrayer ? 'next-prayer' : '';
-
-        const html = `<div class="prayer-column ${prayerClass} ${isNextPrayer}">
-                        <div>${prayer}</div>
-                        <div>${prayerTimes[prayer]}</div>
-                      </div>`;
-        prayerDiv.innerHTML += html;
+        prayerDiv.innerHTML += `<div class="prayer-column ${prayerClass} ${isNextPrayer}">
+                                  <div>${prayer}</div>
+                                  <div>${prayerTimes[prayer]}</div>
+                                </div>`;
       });
 
-      document.getElementById('countdown-timer').textContent = `Sisa Waktu: ${formatCountdown(closestCountdown)}`;
+      // Update countdown
+      if (closestCountdown !== null) {
+        document.getElementById('countdown-adzan').textContent = `Sisa Waktu Adzan: ${formatCountdown(closestCountdown)}`;
+
+        if (closestCountdown <= 0 && closestCountdown > -600) {
+          const iqamahCountdown = 600 + closestCountdown;
+          document.getElementById('countdown-iqamah').textContent = `Sisa Waktu Iqamah: ${formatCountdown(iqamahCountdown)}`;
+        } else {
+          document.getElementById('countdown-iqamah').textContent = 'Sisa Waktu Iqamah: --:--:--';
+        }
+      }
     }
 
     setInterval(updateClock, 1000);
-    setInterval(getPrayerTimes, 60000);
+    setInterval(getPrayerTimes, 1000);
 
     updateClock();
     getPrayerTimes();
