@@ -204,7 +204,7 @@
   </div>
 
   <script>
-    // Menambahkan waktu adzan dan iqamah
+    // Waktu untuk adzan dan iqamah
     const adzanTimes = {
       'Subuh': '04:30',
       'Dhuhr': '12:00',
@@ -221,7 +221,7 @@
       'Isya': '19:20'
     };
 
-    // Fungsi untuk menghitung waktu mundur (countdown)
+    // Fungsi untuk menghitung countdown
     function countdownTo(timeString) {
       const [hours, minutes] = timeString.split(':').map(Number);
       const now = new Date();
@@ -233,9 +233,6 @@
     }
 
     function displayAdzanIqamah() {
-      const now = new Date();
-      const prayerDiv = document.getElementById('prayer-times');
-
       for (const prayer in adzanTimes) {
         const adzanTime = adzanTimes[prayer];
         const iqamahTime = iqamahTimes[prayer];
@@ -256,4 +253,3 @@
   </script>
 </body>
 </html>
-
